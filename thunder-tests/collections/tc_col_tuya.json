@@ -1,0 +1,21 @@
+{
+    "_id": "7c1f907e-400d-434e-8707-4ab83ccd9c72",
+    "colName": "tuya",
+    "created": "2023-07-08T15:32:47.449Z",
+    "sortNum": 10000,
+    "folders": [],
+    "requests": [
+        {
+            "_id": "502b07ad-1e9d-4d9a-9132-3480a8edbfd8",
+            "colId": "7c1f907e-400d-434e-8707-4ab83ccd9c72",
+            "containerId": "",
+            "name": "turn_on",
+            "url": "",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-07-08T15:32:57.292Z",
+            "modified": "2023-07-08T15:32:57.292Z",
+            "headers": []
+        }
+    ]
+}

@@ -1,0 +1,22 @@
+{
+    "_id": "76cf612a-25b1-41c0-96f5-b103d193a1eb",
+    "name": "tuya",
+    "default": true,
+    "sortNum": 10000,
+    "created": "2023-07-08T12:18:06.263Z",
+    "modified": "2023-07-08T12:18:06.263Z",
+    "data": [
+        {
+            "name": "DEVICEID",
+            "value": "3710228040f520e467e5"
+        },
+        {
+            "name": "TOKEN",
+            "value": "ffe3ca6291c0e78cc661a6bff5c820dd"
+        },
+        {
+            "name": "REFRESH_TOKEN",
+            "value": ""
+        }
+    ]
+}

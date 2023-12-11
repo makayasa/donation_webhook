@@ -1,0 +1,96 @@
+{
+    "_id": "fc3ee7d8-8c3a-4923-b7d1-da3c5e518ce9",
+    "colName": "saweria",
+    "created": "2023-07-08T17:37:31.909Z",
+    "sortNum": 20000,
+    "folders": [],
+    "requests": [
+        {
+            "_id": "d05370ed-3454-47a7-a747-5dc2e4199de1",
+            "colId": "fc3ee7d8-8c3a-4923-b7d1-da3c5e518ce9",
+            "containerId": "",
+            "name": "webhook",
+            "url": "http://192.168.0.2:7070/saweria",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-07-08T17:37:37.311Z",
+            "modified": "2023-07-08T18:45:11.219Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                },
+                {
+                    "name": "User-Agent",
+                    "value": "Thunder Client (https://www.thunderclient.com)",
+                    "isDisabled": true
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"version\": \"2022.01\",\n  \"created_at\": \"2021-01-01T12:00:00+00:00\",\n  \"id\": \"00000000-0000-0000-0000-000000000000\",\n  \"type\": \"donation\",\n  \"amount_raw\": 69420,\n  \"cut\": 3471,\n  \"donator_name\": \"Someguy\",\n  \"donator_email\": \"someguy@example.com\",\n  \"donator_is_user\": false,\n  \"message\": \"testing /txt=saya jago bang\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "5547e34f-e945-4cbd-9554-fc049134fea2",
+            "colId": "fc3ee7d8-8c3a-4923-b7d1-da3c5e518ce9",
+            "containerId": "",
+            "name": "webhook https",
+            "url": "https://mkys-webhook.my.id/saweria",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-07-15T09:19:51.647Z",
+            "modified": "2023-07-15T09:20:08.809Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                },
+                {
+                    "name": "User-Agent",
+                    "value": "Thunder Client (https://www.thunderclient.com)",
+                    "isDisabled": true
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"version\": \"2022.01\",\n  \"created_at\": \"2021-01-01T12:00:00+00:00\",\n  \"id\": \"00000000-0000-0000-0000-000000000000\",\n  \"type\": \"donation\",\n  \"amount_raw\": 69420,\n  \"cut\": 3471,\n  \"donator_name\": \"Someguy\",\n  \"donator_email\": \"someguy@example.com\",\n  \"donator_is_user\": false,\n  \"message\": \"testing /txt=saya jago bang\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "eadaa25e-ecbd-4eba-8497-032f46a43111",
+            "colId": "fc3ee7d8-8c3a-4923-b7d1-da3c5e518ce9",
+            "containerId": "",
+            "name": "webhook https Copy",
+            "url": "https://192.168.0.2/api/tunnel",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-07-15T09:42:56.931Z",
+            "modified": "2023-07-15T11:03:33.788Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/json"
+                },
+                {
+                    "name": "User-Agent",
+                    "value": "Thunder Client (https://www.thunderclient.com)",
+                    "isDisabled": true
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"version\": \"2022.01\",\n  \"created_at\": \"2021-01-01T12:00:00+00:00\",\n  \"id\": \"00000000-0000-0000-0000-000000000000\",\n  \"type\": \"donation\",\n  \"amount_raw\": 69420,\n  \"cut\": 3471,\n  \"donator_name\": \"Someguy\",\n  \"donator_email\": \"someguy@example.com\",\n  \"donator_is_user\": false,\n  \"message\": \"testing /txt=saya jago bang\"\n}",
+                "form": []
+            },
+            "tests": []
+        }
+    ]
+}

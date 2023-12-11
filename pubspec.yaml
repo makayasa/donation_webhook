@@ -1,0 +1,35 @@
+name: saweria_webhook
+version: 1.0.0+1
+publish_to: none
+description: A new Flutter project.
+environment: 
+  # sdk: '>=2.18.1 <3.0.0'
+  sdk: '>= 3.0.0 <4.0.0'
+
+dependencies: 
+  cupertino_icons: ^1.0.2
+  get: 4.6.5
+  flutter: 
+    sdk: flutter
+  get_server: ^1.2.1
+  process_run: ^0.13.0
+  get_storage: ^2.1.1
+  fluttertoast: ^8.2.2
+  process: ^4.2.4
+  launch_at_startup: ^0.2.2
+  package_info_plus: ^5.0.1
+  window_manager: ^0.3.7
+  ffi: ^2.1.0
+  # dart_autogui: ^0.0.1
+
+dev_dependencies: 
+  flutter_lints: 2.0.2
+  flutter_test: 
+    sdk: flutter
+
+flutter: 
+  uses-material-design: true
+
+assets:
+  - ssl/
+

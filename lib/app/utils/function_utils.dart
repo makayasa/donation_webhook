@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer' as dev;
 
+import 'package:get/get.dart';
 import 'package:process_run/cmd_run.dart';
 
 import '../../helpers/saweria_message_helper.dart';
@@ -40,10 +41,28 @@ dynamic runCommand({bool isPython3 = false, required String pyautoguiCommand}) {
   return run(pathCommand);
 }
 
-dynamic kontol() {
+dynamic startNgrok({required String url, required String ip, required String port}) async {
   // return run('ngrok http 192.168.0.2:7070 --log-format=json --log=stdout');
   // "ngrok", "http", "--domain=turkey-amazed-regularly.ngrok-free.app", "192.168.0.2:7070"
-  return run('ngrok http --domain=turkey-amazed-regularly.ngrok-free.app 192.168.0.2:7070 --log-format=json --log=stdout');
+  final res = await run(
+    // 'ngrok http --domain=turkey-amazed-regularly.ngrok-free.app 192.168.0.2:7070 --log-format=json --log=stdout',
+    'ngrok http --domain=$url $ip:$port --log-format=json --log=stdout',
+    onProcess: (process) async {
+      logKey('startNgrok', process.pid);
+    },
+  ).catchError(
+    (a) async {
+      logKey('catchError');
+      Get.snackbar(
+        'Error',
+        // 'Ngrok Error, please stop on NGROK dashboard\nthen restart again',
+        'Ngrok is already running'
+      );
+      return a;
+    },
+  );
+  logKey('res', res);
+  return res;
 }
 
 String tuyaInit() {

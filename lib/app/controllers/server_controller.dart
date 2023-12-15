@@ -24,9 +24,9 @@ class ServerController extends gs.GetxController {
     return match?.group(0) ?? '';
   }
 
-  void ngrok() async {
-    var res = await kontol();
-    var stdout = await res[0].stdout;
+  void ngrok({required String url, required String ip, required String port}) async {
+    var res = await startNgrok(url: url, ip: ip, port: port);
+    // var stdout = await res[0].stdout;
     // logKey('res kontol', stdout);
     // var ngrok = await Process.start('ngrok', ['http 7070']);
     // var stdout = await ngrok.stdout;

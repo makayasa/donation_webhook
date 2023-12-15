@@ -1,6 +1,7 @@
 import 'package:get_server/get_server.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:saweria_webhook/app/controllers/tuya_controller.dart';
+import 'package:saweria_webhook/server/models/tako_payload_models.dart';
 
 import '../../helpers/saweria_message_helper.dart';
 import '../../server/models/saweria_payload_models.dart';
@@ -17,10 +18,32 @@ class SaweriaWebhookController extends GetxController {
   // HomeController homeC = g.Get.put(HomeController());
   // late TuyaController tuyaC;a
 
-  void donation(SaweriaPayloadModels data) async {
+  void donationSaweria(SaweriaPayloadModels data) async {
     var _isValo = box.read('valo');
     String msg = data.message;
     if (data.amountRaw < 5000) {
+      return;
+    }
+    if (msg.contains(SaweriaMessageHelper.ON)) {
+      logKey('msg', msg);
+      tuyaC.turnOn();
+      return;
+    } else if (msg.contains(SaweriaMessageHelper.OFF)) {
+      tuyaC.turnOff();
+      return;
+    } else if (msg.contains(SaweriaMessageHelper.DROP)) {
+      dropWeapon(_isValo);
+      return;
+    } else if (msg.contains(SaweriaMessageHelper.TXT)) {
+      allChat(msg, _isValo);
+      return;
+    }
+  }
+
+  void donationTako(TakoPayloadModel data) async {
+    var _isValo = box.read('valo');
+    String msg = data.message;
+    if (data.amount < 5000) {
       return;
     }
     if (msg.contains(SaweriaMessageHelper.ON)) {

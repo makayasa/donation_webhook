@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:saweria_webhook/app/utils/constant.dart';
 
 import '../modules/create_webhook_command/bindings/create_webhook_command_binding.dart';
 import '../modules/create_webhook_command/views/create_webhook_command_view.dart';
@@ -22,6 +23,8 @@ class AppPages {
       name: Routes.CREATE_WEBHOOK_COMMAND,
       page: () => CreateWebhookCommandView(),
       binding: CreateWebhookCommandBinding(),
+      transition: Transition.cupertino,
+      transitionDuration: kDefaultDuration,
     ),
   ];
 }

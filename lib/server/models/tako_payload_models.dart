@@ -6,6 +6,7 @@ class TakoPayloadModel {
     required this.email,
     required this.message,
     required this.amount,
+    this.soundboardOptionId,
     required this.gifUrl,
     required this.creatorId,
   });
@@ -15,6 +16,7 @@ class TakoPayloadModel {
   String email;
   String message;
   int amount;
+  String? soundboardOptionId;
   String gifUrl;
   String creatorId;
 
@@ -23,10 +25,11 @@ class TakoPayloadModel {
         type: json['type'],
         name: json['name'],
         email: json['email'],
-        message: json['message'],
+        message: json['message'] ?? '',
         amount: json['amount'],
-        gifUrl: json['gifUrl'],
-        creatorId: json['creatorId'],
+        soundboardOptionId: json['soundboardOptionId'],
+        gifUrl: json['gifUrl'] ?? '',
+        creatorId: json['creatorId'] ?? '',
       );
 
   toJson() => {
@@ -38,7 +41,7 @@ class TakoPayloadModel {
         "amount": amount,
         "gifUrl": gifUrl,
         // "pollingOptionId": null,
-        // "soundboardOptionId": null,
+        "soundboardOptionId": soundboardOptionId ?? '',
         // "ttvVoteOptionId": null,
         // "userId": null,
         "creatorId": creatorId,

@@ -1,8 +1,8 @@
 import 'package:get_server/get_server.dart' as gs;
-import 'package:saweria_webhook/server/module/saweria/saweria.dart';
 import 'package:saweria_webhook/server/module/tuya/tuya.dart';
 import 'package:saweria_webhook/server/module/tuya/tuya_turn_off.dart';
 import 'package:saweria_webhook/server/module/tuya/tuya_turn_on.dart';
+import 'package:saweria_webhook/server/module/webhook/webhook.dart';
 import 'package:saweria_webhook/server/routes/api_routes.dart';
 
 import '../home_server.dart';
@@ -19,7 +19,7 @@ class ApiPages {
     ),
     gs.GetPage(
       name: ApiRoutes.SAWERIA,
-      page: () => Saweria(),
+      page: () => Webhook(),
       method: gs.Method.post,
       // keys: [],
       // needAuth: true,

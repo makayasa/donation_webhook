@@ -7,9 +7,8 @@ import '../../helpers/saweria_message_helper.dart';
 import '../../server/models/saweria_payload_models.dart';
 import '../utils/function_utils.dart';
 
-class SaweriaWebhookController extends GetxController {
+class WebhookController extends GetxController {
   var box = GetStorage();
-  // var homeC = Get.put(HomeController());
   // var tuyaC = Get.put(TuyaController());
 
   // var homeC = Get.find<HomeController>();
@@ -40,26 +39,38 @@ class SaweriaWebhookController extends GetxController {
     }
   }
 
+  // final takoSoundboard = {};
+
   void donationTako(TakoPayloadModel data) async {
     var _isValo = box.read('valo');
     String msg = data.message;
-    if (data.amount < 5000) {
+    if (data.amount < 5000 && data.type != 'SOUNDBOARD') {
       return;
     }
-    if (msg.contains(SaweriaMessageHelper.ON)) {
-      logKey('msg', msg);
-      tuyaC.turnOn();
-      return;
-    } else if (msg.contains(SaweriaMessageHelper.OFF)) {
+
+    logKey('masuk ke tako', data.soundboardOptionId);
+
+    if (data.soundboardOptionId == '6f8f7bcc-35f1-4ee4-8e16-4624e609686d') {
       tuyaC.turnOff();
-      return;
-    } else if (msg.contains(SaweriaMessageHelper.DROP)) {
-      dropWeapon(_isValo);
-      return;
-    } else if (msg.contains(SaweriaMessageHelper.TXT)) {
-      allChat(msg, _isValo);
-      return;
+    } else if (data.soundboardOptionId == 'e614f419-971f-43f6-a0e1-22a9f5b111a5') {
+      tuyaC.turnOn();
+    } else if (data.soundboardOptionId == 'dfe8802b-1ca0-4a6a-a2e1-e1c0b3b2e321' && box.read('valo')) {
+      dropWeapon(true);
     }
+    // if (msg.contains(SaweriaMessageHelper.ON)) {
+    //   logKey('msg', msg);
+    //   tuyaC.turnOn();
+    //   return;
+    // } else if (msg.contains(SaweriaMessageHelper.OFF)) {
+    //   tuyaC.turnOff();
+    //   return;
+    // } else if (msg.contains(SaweriaMessageHelper.DROP)) {
+    //   dropWeapon(_isValo);
+    //   return;
+    // } else if (msg.contains(SaweriaMessageHelper.TXT)) {
+    //   allChat(msg, _isValo);
+    //   return;
+    // }
   }
 
   @override

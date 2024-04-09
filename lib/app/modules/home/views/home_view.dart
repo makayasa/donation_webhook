@@ -7,6 +7,7 @@ import 'package:saweria_webhook/app/controllers/components/default_button.dart';
 import 'package:saweria_webhook/app/controllers/server_controller.dart';
 import 'package:saweria_webhook/app/utils/constant.dart';
 import 'package:saweria_webhook/app/utils/default_text.dart';
+import '../../../routes/app_pages.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -23,9 +24,10 @@ class HomeView extends GetResponsiveView<HomeController> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          Get.toNamed(Routes.CREATE_WEBHOOK_COMMAND);
           // controller.obsWebSocket.close();
           // controller.sourceStateChangedAllScene('Main Monitor');
-          controller.sourceStateChangedAllScene('Webcam2');
+          // controller.sourceStateChangedAllScene('Webcam');
 
           // MethodChannel channel = MethodChannel('test_channel');
           // var res = await channel.invokeMethod('test');
@@ -46,20 +48,6 @@ class HomeView extends GetResponsiveView<HomeController> {
       drawerScrimColor: Colors.transparent,
       body: Row(
         children: [
-          // Container(
-          //   width: Get.mediaQuery.size.width * 0.2,
-          //   color: kSecondaryColor,
-          //   child: Column(
-          //     children: [
-          //       DefText('Drawer').normal,
-          //       DefText('Drawer').normal,
-          //       DefText('Drawer').normal,
-          //       DefText('Drawer').normal,
-          //       DefText('Drawer').normal,
-          //       DefText('Drawer').normal,
-          //     ],
-          //   ),
-          // ),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -86,7 +74,6 @@ class HomeView extends GetResponsiveView<HomeController> {
             ),
           ),
           Container(
-            // width: Get.mediaQuery.size.width * 0.4,
             height: Get.mediaQuery.size.height,
             constraints: const BoxConstraints(
               maxWidth: 400,
@@ -106,7 +93,9 @@ class HomeView extends GetResponsiveView<HomeController> {
                     ),
                   ),
                 ),
-                const NgrokCard(),
+                const Expanded(
+                  child: NgrokCard(),
+                ),
                 const Expanded(
                   child: ObsCard(),
                 ),
@@ -157,18 +146,6 @@ class ObsCard extends GetView<HomeController> {
                 ),
               ],
             ),
-            // const SizedBox(height: 10),
-            // FormBuilderTextField(
-            //   name: 'ip',
-            //   decoration: const InputDecoration(
-            //     hintText: 'ngrok dns',
-            //     border: OutlineInputBorder(),
-            //   ),
-            //   validator: FormBuilderValidators.compose([
-            //     FormBuilderValidators.required(),
-            //     FormBuilderValidators.url(),
-            //   ]),
-            // ),
             const SizedBox(height: 10),
             Row(
               children: [
@@ -180,7 +157,12 @@ class ObsCard extends GetView<HomeController> {
                       hintText: 'IP',
                       border: OutlineInputBorder(),
                     ),
-                    validator: FormBuilderValidators.compose([FormBuilderValidators.required(), FormBuilderValidators.ip()]),
+                    validator: FormBuilderValidators.compose(
+                      [
+                        FormBuilderValidators.required(),
+                        FormBuilderValidators.ip(),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(width: 10),

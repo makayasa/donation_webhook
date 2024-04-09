@@ -11,6 +11,7 @@ class DefaultButton extends StatelessWidget {
     this.onTap,
     this.color = kPrimaryColor,
     this.showBorder = false,
+    this.borderColor = kSecondaryColor,
   });
   final Function()? onTap;
   final Widget child;
@@ -18,6 +19,7 @@ class DefaultButton extends StatelessWidget {
   final double? width;
   final Color color;
   final bool showBorder;
+  final Color borderColor;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class DefaultButton extends StatelessWidget {
           decoration: showBorder
               ? BoxDecoration(
                   border: Border.all(
-                    color: kSecondaryColor,
+                    color: borderColor,
                   ),
                   borderRadius: kDefaultBorderRadius10,
                 )

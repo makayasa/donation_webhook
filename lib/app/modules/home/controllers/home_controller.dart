@@ -5,11 +5,10 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:get_server/get_server.dart' as gs;
 import 'package:get_storage/get_storage.dart';
-import 'package:loggy/loggy.dart';
 import 'package:obs_websocket/obs_websocket.dart';
-import 'package:saweria_webhook/app/controllers/saweria_webhook_controller.dart';
 import 'package:saweria_webhook/app/controllers/server_controller.dart';
 import 'package:saweria_webhook/app/controllers/tuya_controller.dart';
+import 'package:saweria_webhook/app/controllers/webhook_controller.dart';
 
 import '../../../utils/function_utils.dart';
 
@@ -25,7 +24,7 @@ class HomeController extends GetxController {
 
   late TuyaController tuyaC;
   late ServerController serverC;
-  late SaweriaWebhookController saweriaC;
+  late WebhookController saweriaC;
 
   void connectNgrok() {
     final isValidate = formKeyNgrok.currentState!.saveAndValidate();
@@ -241,10 +240,10 @@ class HomeController extends GetxController {
     } else {
       serverC = gs.Get.put(ServerController());
     }
-    if (gs.Get.isRegistered<SaweriaWebhookController>()) {
-      saweriaC = gs.Get.find<SaweriaWebhookController>();
+    if (gs.Get.isRegistered<WebhookController>()) {
+      saweriaC = gs.Get.find<WebhookController>();
     } else {
-      saweriaC = gs.Get.put(SaweriaWebhookController());
+      saweriaC = gs.Get.put(WebhookController());
     }
   }
 

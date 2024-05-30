@@ -6,9 +6,6 @@ import '../../server/routes/api_pages.dart';
 // import 'package:get/get.dart' as g;
 
 class ServerController extends gs.GetxController {
-  // HomeController homeC = g.Get.find<HomeController>();
-  // TuyaController tuyaC = Get.find<TuyaController>();
-  // late SaweriaWebhookController saweriaC;
   var server = gs.GetServerApp(
     host: '192.168.0.2',
     port: 7070,

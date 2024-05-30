@@ -32,8 +32,6 @@ class TuyaController extends GetxController {
   }
 
   Future<bool> isTokenValid() async {
-    // final prefs = await SharedPreferences.getInstance();
-    // final tokenReceivedTime = prefs.getInt(_tokenReceivedTimeKey);
     final tokenReceivedTime = boxTuya.read(kTuyaCreatedTime);
     final expireTime = boxTuya.read(kTuyaExpireTime);
 
@@ -50,14 +48,12 @@ class TuyaController extends GetxController {
 
   Future<void> checkTokenValidation() async {
     if (!await isTokenValid()) {
-      logKey('masuk token invalid / refresh', true);
       await tuyaGetToken(isRefresh: true);
     }
   }
 
   Future<void> tuyaGetToken({bool isRefresh = false}) async {
     final url = '$tuyaBaseUrl/$ver/token?grant_type=1';
-    // final sign = _generateHeaderSignature(url: url);
     if (isRefresh) {
       boxTuya.erase();
     }
@@ -67,7 +63,6 @@ class TuyaController extends GetxController {
         url,
         headers: headers,
       );
-      // logKey('res tuyaGetToken',res.data);
       final isSuccess = res.data['success'];
       if (!isSuccess) {
         throw DioException.badResponse(
@@ -100,7 +95,6 @@ class TuyaController extends GetxController {
   Future<void> tuyaRefreshToken() async {
     final refreshToken = boxTuya.read(kTuyaRefreshToken);
     final url = '$tuyaBaseUrl/$ver/token/$refreshToken?grant_type=1';
-    logKey('refreshToken asd', refreshToken);
     final headers = _generateHeaderSignature(url: url).headers;
     try {
       final Response res = await networkC.get(
@@ -325,7 +319,9 @@ class TuyaController extends GetxController {
     final data = {'commands': jsonEncode(commands)};
     final headers = _generateHeaderSignature(httpMethod: 'POST', url: url, commands: commands).headers;
     try {
+      await checkTokenValidation();
       final Response res = await networkC.post(url, body: data, headers: headers);
+      logKey('res turnOn', res.data);
     } on DioException catch (e) {
       logKey('error turnOff', e.message);
     }
@@ -339,10 +335,32 @@ class TuyaController extends GetxController {
     final data = {'commands': jsonEncode(commands)};
     final headers = _generateHeaderSignature(url: url, httpMethod: 'POST', commands: commands).headers;
     try {
+      await checkTokenValidation();
       final Response res = await networkC.post(url, body: data, headers: headers);
       logKey('res jedagJedug', res.data);
     } on DioException catch (e) {
       logKey('error jedagJedug', e.message);
+    }
+  }
+
+  void turnOffAc(String deviceId) async {
+    final url = '$tuyaBaseUrl/$ver/devices/$deviceId/commands';
+    logKey('masuk turnOffAc');
+    final commands = [
+      {
+        "code": "PowerOff",
+        "type": "STRING",
+        "values": "PowerOff",
+      },
+    ];
+    final data = {'commands': jsonEncode(commands)};
+    final headers = _generateHeaderSignature(url: url, commands: commands, httpMethod: 'POST').headers;
+    try {
+      await checkTokenValidation();
+      final Response res = await networkC.post(url, body: data, headers: headers);
+      logKey('res turnOffAc', res.data);
+    } on DioException catch (e) {
+      logKey('error turnOffAc', e.message);
     }
   }
 

@@ -1,6 +1,7 @@
 import 'package:get_server/get_server.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:saweria_webhook/app/controllers/tuya_controller.dart';
+import 'package:saweria_webhook/app/utils/environment.dart';
 import 'package:saweria_webhook/server/models/tako_payload_models.dart';
 
 import '../../helpers/saweria_message_helper.dart';
@@ -25,10 +26,10 @@ class WebhookController extends GetxController {
     }
     if (msg.contains(SaweriaMessageHelper.ON)) {
       logKey('msg', msg);
-      tuyaC.turnOn();
+      tuyaC.turnOn(lampu_kamar_device_id);
       return;
     } else if (msg.contains(SaweriaMessageHelper.OFF)) {
-      tuyaC.turnOff();
+      tuyaC.turnOff(lampu_kamar_device_id);
       return;
     } else if (msg.contains(SaweriaMessageHelper.DROP)) {
       dropWeapon(_isValo);
@@ -51,9 +52,9 @@ class WebhookController extends GetxController {
     logKey('masuk ke tako', data.soundboardOptionId);
 
     if (data.soundboardOptionId == '6f8f7bcc-35f1-4ee4-8e16-4624e609686d') {
-      tuyaC.turnOff();
+      tuyaC.turnOff(lampu_kamar_device_id);
     } else if (data.soundboardOptionId == 'e614f419-971f-43f6-a0e1-22a9f5b111a5') {
-      tuyaC.turnOn();
+      tuyaC.turnOn(lampu_kamar_device_id);
     } else if (data.soundboardOptionId == 'dfe8802b-1ca0-4a6a-a2e1-e1c0b3b2e321' && box.read('valo')) {
       dropWeapon(true);
     }

@@ -54,10 +54,9 @@ dynamic startNgrok({required String url, required String ip, required String por
     (a) async {
       logKey('catchError');
       Get.snackbar(
-        'Error',
-        // 'Ngrok Error, please stop on NGROK dashboard\nthen restart again',
-        'Ngrok is already running'
-      );
+          'Error',
+          // 'Ngrok Error, please stop on NGROK dashboard\nthen restart again',
+          'Ngrok is already running');
       return a;
     },
   );
@@ -95,4 +94,33 @@ void allChat(String message, bool valorantMode) async {
 void moveMouse() async {
   var cmdString = 'pyautogui.moveTo(100, 100, 2, pyautogui.easeInQuad);';
   runCommand(pyautoguiCommand: cmdString);
+}
+
+bool isEmpty(dynamic val) {
+  return [
+    "",
+    " ",
+    null,
+    'null',
+    '{}',
+    '[]',
+    '0',
+    '0.0',
+    '-1',
+  ].contains(val.toString());
+}
+
+bool isNotEmpty(dynamic val) {
+  return ![
+    "",
+    " ",
+    null,
+    'null',
+    '{}',
+    '[]',
+    '0',
+    '0.0',
+    '0.00',
+    '-1',
+  ].contains(val.toString());
 }

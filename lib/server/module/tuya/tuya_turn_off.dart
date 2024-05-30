@@ -9,8 +9,9 @@ class TuyaTurnOff extends gs.GetView<TuyaController> {
   build(gs.BuildContext context) {
     var req = context.request.query;
     context.request.payload().then((value) {
-      print('masuk off');
-      controller.turnOff();
+      logKey('masuk off', value);
+      //{"device_id":"3710228040f520e467e5"}
+      controller.turnOff(value?['device_id']);
     });
     logKey('req saweria', req);
     return gs.Json(

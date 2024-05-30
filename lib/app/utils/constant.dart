@@ -35,3 +35,11 @@ const kDefaultBorderRadius10 = BorderRadius.all(
 const kDefaultBorderRadius = BorderRadius.all(
   Radius.circular(5),
 );
+
+const kTuyaTokenMap = 'tuya_map';
+
+const kTuyaAccessToken = 'access_token';
+const kTuyaRefreshToken = 'refresh_token';
+const kTuyaExpireTime = 'expire_time';
+const kTuyaCreatedTime = 'created_time';
+// const kTuyaRefreshToken = 'tuya_refresh_token';

@@ -8,8 +8,12 @@ class Tuya extends gs.GetView<ServerController> {
   @override
   build(gs.BuildContext context) {
     var req = context.request.query;
-    context.request.payload().then((value) {});
+    context.request.payload().then((value) {
+      // final tuyaC = gs.Get.find<TuyaController>();
+      // tuyaC.jedagJedug(value?['device_id'], value?['is_on']);
+    });
     logKey('req saweria', req);
+
     return gs.Json(
       {'res': 'resss'},
     );

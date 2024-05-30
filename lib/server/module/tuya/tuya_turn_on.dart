@@ -9,7 +9,7 @@ class TuyaTurnOn extends gs.GetView<TuyaController> {
   build(gs.BuildContext context) {
     var req = context.request.query;
     context.request.payload().then((value) {
-      controller.turnOn();
+      controller.turnOn(value?['device_id']);
     });
     logKey('req saweria', req);
     return gs.Json(

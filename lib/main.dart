@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:saweria_webhook/app/settings/global_bindings.dart';
-import 'package:launch_at_startup/launch_at_startup.dart';
 import 'package:saweria_webhook/app/utils/constant.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -31,9 +31,10 @@ void main() async {
   // });
   // WindowManager.instance.setMinimumSize(const Size(1280, 720));
   WindowManager.instance.setMinimumSize(const Size(960, 720));
-  WindowManager.instance.setMaximumSize(const Size( 2560, 1440));
+  WindowManager.instance.setMaximumSize(const Size(2560, 1440));
   // windowManager.minimize();
   await GetStorage.init();
+  await GetStorage.init('tuya');
   // Validate.installed();
   // var server = gs.GetServerApp(
   // host: '192.168.0.2',
@@ -48,10 +49,11 @@ void main() async {
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
       theme: ThemeData(
-          scaffoldBackgroundColor: kPrimaryColor,
-          appBarTheme: const AppBarTheme(
-            color: kSecondaryColor,
-          )),
+        scaffoldBackgroundColor: kPrimaryColor,
+        appBarTheme: const AppBarTheme(
+          color: kSecondaryColor,
+        ),
+      ),
     ),
   );
 }

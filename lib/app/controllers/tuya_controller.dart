@@ -83,12 +83,10 @@ class TuyaController extends GetxController {
       boxTuya.write(kTuyaTokenMap, data);
       boxTuya.write(kTuyaAccessToken, data['access_token']);
       boxTuya.write(kTuyaRefreshToken, data['refresh_token']);
-      // boxTuya.write(kTuyaExpireTime, data['expire_time']);
-      boxTuya.write(kTuyaExpireTime, 20);
+      boxTuya.write(kTuyaExpireTime, data['expire_time']);
       boxTuya.write(kTuyaCreatedTime, data['created_time']);
 
       logKey('success write token', boxTuya.read(kTuyaAccessToken));
-      // await box.write(kTuyaRefreshToken, res.data['result']['refresh_token']);
     } on DioException catch (e) {
       logKey('error auth', e.message);
       rethrow;
@@ -129,9 +127,7 @@ class TuyaController extends GetxController {
     String httpMethod = 'GET',
     bool isRefreshToken = false,
   }) {
-    // final url = '$tuyaBaseUrl/$ver/devices/$deviceId/commands';
     final accessToken = isRefreshToken ? boxTuya.read(kTuyaRefreshToken) ?? '' : boxTuya.read(kTuyaAccessToken) ?? '';
-    // logKey('accessToken', accessToken);
     String timestamp = (DateTime.now().millisecondsSinceEpoch).toString();
     String nonce = const Uuid().v4();
     String contentSha256;
@@ -417,6 +413,18 @@ class TuyaController extends GetxController {
         logKey('error turnOffAc', e.message);
       }
       // await Future.delayed(const Duration(seconds: 10));
+    }
+  }
+
+  void getDeviceDetails(String deviceId) async {
+    final url = '$tuyaBaseUrl/$ver/devices/$deviceId/status';
+    final headers = _generateHeaderSignature(url: url, httpMethod: 'GET').headers;
+    try {
+      await checkTokenValidation();
+      final Response res = await networkC.get(url, headers: headers);
+      logKey('res getDeviceDetails', res.data);
+    } on DioException catch (e) {
+      logKey('error getDeviceDetails', e.message);
     }
   }
 

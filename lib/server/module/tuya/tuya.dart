@@ -2,6 +2,8 @@
 import 'package:get_server/get_server.dart' as gs;
 import 'package:saweria_webhook/app/controllers/server_controller.dart';
 import 'package:saweria_webhook/app/utils/function_utils.dart';
+
+import '../../../app/controllers/tuya_controller.dart';
 // import 'get'
 
 class Tuya extends gs.GetView<ServerController> {
@@ -9,8 +11,9 @@ class Tuya extends gs.GetView<ServerController> {
   build(gs.BuildContext context) {
     var req = context.request.query;
     context.request.payload().then((value) {
-      // final tuyaC = gs.Get.find<TuyaController>();
+      final tuyaC = gs.Get.find<TuyaController>();
       // tuyaC.jedagJedug(value?['device_id'], value?['is_on']);
+      tuyaC.getDeviceDetails(value?['device_id']);
     });
     logKey('req saweria', req);
 

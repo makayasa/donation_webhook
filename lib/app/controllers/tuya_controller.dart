@@ -48,7 +48,10 @@ class TuyaController extends GetxController {
 
   Future<void> checkTokenValidation() async {
     if (!await isTokenValid()) {
+      logKey('TOKEN INVALID!!!', boxTuya.read(kTuyaAccessToken));
+      boxTuya.erase();
       await tuyaGetToken(isRefresh: true);
+      logKey('GET NEW TOKEN', boxTuya.read(kTuyaAccessToken));
     }
   }
 
@@ -80,7 +83,8 @@ class TuyaController extends GetxController {
       boxTuya.write(kTuyaTokenMap, data);
       boxTuya.write(kTuyaAccessToken, data['access_token']);
       boxTuya.write(kTuyaRefreshToken, data['refresh_token']);
-      boxTuya.write(kTuyaExpireTime, data['expire_time']);
+      // boxTuya.write(kTuyaExpireTime, data['expire_time']);
+      boxTuya.write(kTuyaExpireTime, 20);
       boxTuya.write(kTuyaCreatedTime, data['created_time']);
 
       logKey('success write token', boxTuya.read(kTuyaAccessToken));
@@ -330,7 +334,10 @@ class TuyaController extends GetxController {
   void jedagJedug(String deviceId, bool isOn) async {
     final url = '$tuyaBaseUrl/$ver/devices/$deviceId/commands';
     final commands = [
-      {'code': 'work_mode', 'value': isOn ? 'scene' : 'white'}
+      {
+        'code': 'work_mode',
+        'value': isOn ? 'scene' : 'white',
+      }
     ];
     final data = {'commands': jsonEncode(commands)};
     final headers = _generateHeaderSignature(url: url, httpMethod: 'POST', commands: commands).headers;
@@ -349,9 +356,13 @@ class TuyaController extends GetxController {
     final commands = [
       {
         "code": "PowerOff",
-        "type": "STRING",
+        // "type": "STRING",
         "values": "PowerOff",
       },
+      // {
+      //   "code": "switch",
+      //   "values": false,
+      // },
     ];
     final data = {'commands': jsonEncode(commands)};
     final headers = _generateHeaderSignature(url: url, commands: commands, httpMethod: 'POST').headers;
@@ -361,6 +372,51 @@ class TuyaController extends GetxController {
       logKey('res turnOffAc', res.data);
     } on DioException catch (e) {
       logKey('error turnOffAc', e.message);
+    }
+  }
+
+  void turnOnAc(String deviceId) async {
+    final url = '$tuyaBaseUrl/$ver/devices/$deviceId/commands';
+    final commands = [
+      {
+        "code": "PowerOn",
+        "values": "PowerOn",
+      },
+      // {
+      //   "code": "mode",
+      //   "desc": "mode",
+      //   "name": "mode",
+      //   "type": "ENUM",
+      //   "values": "cold",
+      // },
+      {
+        "code": "M",
+        "value": 0,
+      },
+      {
+        "code": "T",
+        "value": 26,
+      },
+      {
+        "code": "F",
+        "value": 0,
+      },
+    ];
+    for (var i = 0; i < commands.length; i++) {
+      final _commands = [
+        commands[i],
+      ];
+      logKey('_commands', _commands);
+      final data = {'commands': jsonEncode(_commands)};
+      final headers = _generateHeaderSignature(url: url, commands: _commands, httpMethod: 'POST').headers;
+      try {
+        await checkTokenValidation();
+        final Response res = await networkC.post(url, body: data, headers: headers);
+        logKey('res turnOffAc', res.data);
+      } on DioException catch (e) {
+        logKey('error turnOffAc', e.message);
+      }
+      // await Future.delayed(const Duration(seconds: 10));
     }
   }
 

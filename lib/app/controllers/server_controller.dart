@@ -1,18 +1,44 @@
 import 'package:get_server/get_server.dart' as gs;
 import 'package:saweria_webhook/app/utils/function_utils.dart';
+import 'package:saweria_webhook/server/routes/api_routes.dart';
 
 import '../../server/routes/api_pages.dart';
+import 'tuya_controller.dart';
 
 // import 'package:get/get.dart' as g;
 
 class ServerController extends gs.GetxController {
-  var server = gs.GetServerApp(
+  final test = false.obs;
+  // var server = gs.GetServerApp(
+  //   host: '192.168.0.2',
+  //   port: 7070,
+  //   getPages: ApiPages.routes,
+  //   // certificateChain: 'ssl/mkys-webhook_my_id.crt',
+  //   // privateKey: 'ssl/keymkys.key',
+  // );
+
+  var server = gs.GetServer(
     host: '192.168.0.2',
     port: 7070,
     getPages: ApiPages.routes,
-    // certificateChain: 'ssl/mkys-webhook_my_id.crt',
-    // privateKey: 'ssl/keymkys.key',
   );
+
+  void initServer() {
+    logKey('masuk init server');
+    server.post(ApiRoutes.TUYA, (ctx) {
+      return gs.PayloadWidget(
+        builder: (context, payload) {
+          var tuyaC = gs.Get.find<TuyaController>();
+          tuyaC.getDeviceDetails(payload?['device_id']).then(
+                (value) => context.sendJson(
+                  {'result': value},
+                ),
+              );
+          return gs.WidgetEmpty();
+        },
+      );
+    });
+  }
 
   String getForwardedUrl(String output) {
     // Parsing output ngrok untuk mendapatkan URL forwarding
@@ -34,6 +60,7 @@ class ServerController extends gs.GetxController {
     super.onInit();
     // ngrok();
     logKey('server started');
+    initServer();
   }
 
   @override

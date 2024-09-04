@@ -161,6 +161,30 @@ class HomeController extends GetxController {
 
   void hideSourceOnCurrentScene(String sourceName) async {}
 
+  Future<void> toggleSourceOnActiveScene(String sourceName, {String? sceneName}) async {
+    try {
+      final currentScene = await obsWebSocket.value!.scenes.getCurrentProgramScene();
+      final sourcesId = await obsWebSocket.value!.sceneItems.getId(sceneName: sceneName ?? currentScene, sourceName: sourceName);
+      final sourceStatus = await obsWebSocket.value!.sendRequest(
+        Request(
+          'GetSourceActive',
+          requestData: {
+            'sourceName': sourceName,
+          },
+        ),
+      );
+      await obsWebSocket.value!.sceneItems.setSceneItemEnabled(
+        SceneItemEnableStateChanged(
+          sceneName: sceneName ?? currentScene,
+          sceneItemId: sourcesId,
+          sceneItemEnabled: !sourceStatus?.responseData?['videoShowing'],
+        ),
+      );
+    } catch (e) {
+      logKey('error hideSourceOnActiveScene', e);
+    }
+  }
+
   Future<void> hideSourceOnAllScene(String sourceName) async {
     try {
       final scenes = await obsWebSocket.value!.scenes.getSceneList();

@@ -1,6 +1,5 @@
 import 'package:get_server/get_server.dart' as gs;
 import 'package:saweria_webhook/server/module/tuya/tur_ir_ac_turn_on.dart';
-import 'package:saweria_webhook/server/module/tuya/tuya.dart';
 import 'package:saweria_webhook/server/module/tuya/tuya_ir_ac_turn_off.dart';
 import 'package:saweria_webhook/server/module/tuya/tuya_turn_off.dart';
 import 'package:saweria_webhook/server/module/tuya/tuya_turn_on.dart';
@@ -26,11 +25,11 @@ class ApiPages {
       // keys: [],
       // needAuth: true,
     ),
-    gs.GetPage(
-      name: ApiRoutes.TUYA,
-      page: () => Tuya(),
-      method: gs.Method.post,
-    ),
+    // gs.GetPage(
+    //   name: ApiRoutes.TUYA,
+    //   page: () => Tuya(),
+    //   method: gs.Method.post,
+    // ),
     gs.GetPage(
       name: ApiRoutes.TURN_ON,
       page: () => TuyaTurnOn(),

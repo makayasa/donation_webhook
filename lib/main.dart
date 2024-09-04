@@ -49,7 +49,7 @@ void main() async {
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
       theme: ThemeData(
-        scaffoldBackgroundColor: kPrimaryColor,
+        // scaffoldBackgroundColor: kPrimaryColor,
         appBarTheme: const AppBarTheme(
           color: kSecondaryColor,
         ),

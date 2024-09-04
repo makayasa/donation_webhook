@@ -2,32 +2,35 @@ class TakoPayloadModel {
   TakoPayloadModel({
     required this.id,
     required this.type,
-    required this.name,
-    required this.email,
+    required this.creatorName,
+    required this.gifterEmail,
+    required this.gifterName,
     required this.message,
     required this.amount,
-    this.soundboardOptionId,
+    this.soundboardSoundId,
     required this.gifUrl,
     required this.creatorId,
   });
   String id;
   String type;
-  String name;
-  String email;
+  String creatorName;
+  String gifterName;
+  String gifterEmail;
   String message;
   int amount;
-  String? soundboardOptionId;
+  String? soundboardSoundId;
   String gifUrl;
   String creatorId;
 
   factory TakoPayloadModel.fromJson(Map<dynamic, dynamic> json) => TakoPayloadModel(
         id: json['id'],
         type: json['type'],
-        name: json['name'],
-        email: json['email'],
+        creatorName: json['creatorName'],
+        gifterName: json['gifterName'],
+        gifterEmail: json['gifterEmail'],
         message: json['message'] ?? '',
         amount: json['amount'],
-        soundboardOptionId: json['soundboardOptionId'],
+        soundboardSoundId: json['soundboardSoundId'],
         gifUrl: json['gifUrl'] ?? '',
         creatorId: json['creatorId'] ?? '',
       );
@@ -35,13 +38,14 @@ class TakoPayloadModel {
   toJson() => {
         "id": id,
         "type": type,
-        "name": name,
-        "email": email,
+        "creatorName": creatorName,
+        'gifterName': gifterName,
+        "gifterEmail": gifterEmail,
         "message": message,
         "amount": amount,
         "gifUrl": gifUrl,
         // "pollingOptionId": null,
-        "soundboardOptionId": soundboardOptionId ?? '',
+        "soundboardSoundId": soundboardSoundId ?? '',
         // "ttvVoteOptionId": null,
         // "userId": null,
         "creatorId": creatorId,

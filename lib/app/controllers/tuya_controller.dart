@@ -338,7 +338,7 @@ class TuyaController extends GetxController {
     final data = {'commands': jsonEncode(commands)};
     final headers = _generateHeaderSignature(url: url, httpMethod: 'POST', commands: commands).headers;
     try {
-      await checkTokenValidation();
+      // await checkTokenValidation();
       final Response res = await networkC.post(url, body: data, headers: headers);
       logKey('res jedagJedug', res.data);
     } on DioException catch (e) {
@@ -416,15 +416,17 @@ class TuyaController extends GetxController {
     }
   }
 
-  void getDeviceDetails(String deviceId) async {
+  Future<List<dynamic>> getDeviceDetails(String deviceId) async {
     final url = '$tuyaBaseUrl/$ver/devices/$deviceId/status';
     final headers = _generateHeaderSignature(url: url, httpMethod: 'GET').headers;
     try {
       await checkTokenValidation();
       final Response res = await networkC.get(url, headers: headers);
       logKey('res getDeviceDetails', res.data);
+      return res.data['result'];
     } on DioException catch (e) {
       logKey('error getDeviceDetails', e.message);
+      return [];
     }
   }
 

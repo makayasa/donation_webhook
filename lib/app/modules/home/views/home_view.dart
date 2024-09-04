@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
-import 'package:get_server/get_server.dart' as gs;
 import 'package:saweria_webhook/app/controllers/components/default_button.dart';
-import 'package:saweria_webhook/app/controllers/server_controller.dart';
 import 'package:saweria_webhook/app/utils/constant.dart';
 import 'package:saweria_webhook/app/utils/default_text.dart';
-import '../../../routes/app_pages.dart';
 
+import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetResponsiveView<HomeController> {
@@ -24,6 +22,8 @@ class HomeView extends GetResponsiveView<HomeController> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          controller.toggleSourceOnActiveScene('Logitech Webcam');
+          return;
           Get.toNamed(Routes.CREATE_WEBHOOK_COMMAND);
           // controller.obsWebSocket.close();
           // controller.sourceStateChangedAllScene('Main Monitor');

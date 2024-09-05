@@ -1,7 +1,7 @@
 // import 'package:flutter/material.dart';
 import 'package:get_server/get_server.dart' as gs;
-import 'package:saweria_webhook/app/controllers/tuya_controller.dart';
 import 'package:saweria_webhook/app/utils/function_utils.dart';
+import 'package:saweria_webhook/server/controllers/tuya_controller.dart';
 // import 'get'
 
 class TuyaTurnOff extends gs.GetView<TuyaController> {

@@ -2,7 +2,7 @@ import 'package:get_server/get_server.dart' as gs;
 import 'package:saweria_webhook/app/utils/function_utils.dart';
 import 'package:saweria_webhook/server/routes/api_routes.dart';
 
-import '../../server/routes/api_pages.dart';
+import '../routes/api_pages.dart';
 import 'tuya_controller.dart';
 
 // import 'package:get/get.dart' as g;

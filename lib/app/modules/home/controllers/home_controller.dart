@@ -6,9 +6,9 @@ import 'package:get/get.dart';
 import 'package:get_server/get_server.dart' as gs;
 import 'package:get_storage/get_storage.dart';
 import 'package:obs_websocket/obs_websocket.dart';
-import 'package:saweria_webhook/app/controllers/server_controller.dart';
-import 'package:saweria_webhook/app/controllers/tuya_controller.dart';
-import 'package:saweria_webhook/app/controllers/webhook_controller.dart';
+import 'package:saweria_webhook/server/controllers/server_controller.dart';
+import 'package:saweria_webhook/server/controllers/tuya_controller.dart';
+import 'package:saweria_webhook/server/controllers/webhook_controller.dart';
 
 import '../../../utils/function_utils.dart';
 

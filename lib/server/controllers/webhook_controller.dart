@@ -1,14 +1,14 @@
 import 'package:get/get.dart' as g;
 import 'package:get_server/get_server.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:saweria_webhook/app/controllers/tuya_controller.dart';
 import 'package:saweria_webhook/app/utils/environment.dart';
+import 'package:saweria_webhook/server/controllers/tuya_controller.dart';
 import 'package:saweria_webhook/server/models/tako_payload_models.dart';
 
+import '../../app/modules/home/controllers/home_controller.dart';
+import '../../app/utils/function_utils.dart';
 import '../../helpers/saweria_message_helper.dart';
-import '../../server/models/saweria_payload_models.dart';
-import '../modules/home/controllers/home_controller.dart';
-import '../utils/function_utils.dart';
+import '../models/saweria_payload_models.dart';
 
 class WebhookController extends GetxController {
   var box = GetStorage();
@@ -17,7 +17,8 @@ class WebhookController extends GetxController {
   // var homeC = Get.find<HomeController>();
   var tuyaC = Get.find<TuyaController>();
 
-  HomeController homeC = g.Get.put(HomeController());
+  // HomeController homeC = g.Get.put(HomeController());
+  // HomeController homeC = g.Get.find<HomeController>();
   // late TuyaController tuyaC;a
 
   void donationSaweria(SaweriaPayloadModels data) async {
@@ -43,6 +44,8 @@ class WebhookController extends GetxController {
   }
 
   void donationTako(TakoPayloadModel data) async {
+    HomeController homeC = g.Get.find<HomeController>();
+    // HomeController homeC = g.Get.put(HomeController());
     var _isValo = box.read('valo');
     String msg = data.message;
     if (data.amount < 0 && data.type != 'SOUNDBOARD') {
@@ -59,9 +62,11 @@ class WebhookController extends GetxController {
     } else if (data.soundboardSoundId == 'dfe8802b-1ca0-4a6a-a2e1-e1c0b3b2e321' && box.read('valo')) {
       dropWeapon(true);
     }
-    await homeC.toggleSourceOnActiveScene('Mixer AG06', sceneName: 'Audio');
+    // await homeC.toggleSourceOnActiveScene('Mixer AG06', sceneName: 'Audio');
+    await homeC.toggleSourceOnActiveScene('Logitech Webcam');
     await Future.delayed(const Duration(seconds: 5));
-    await homeC.toggleSourceOnActiveScene('Mixer AG06', sceneName: 'Audio');
+    await homeC.toggleSourceOnActiveScene('Logitech Webcam');
+    // await homeC.toggleSourceOnActiveScene('Mixer AG06', sceneName: 'Audio');
   }
 
   @override

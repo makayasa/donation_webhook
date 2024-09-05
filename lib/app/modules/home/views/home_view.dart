@@ -22,8 +22,6 @@ class HomeView extends GetResponsiveView<HomeController> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          controller.toggleSourceOnActiveScene('Logitech Webcam');
-          return;
           Get.toNamed(Routes.CREATE_WEBHOOK_COMMAND);
           // controller.obsWebSocket.close();
           // controller.sourceStateChangedAllScene('Main Monitor');
@@ -89,7 +87,10 @@ class HomeView extends GetResponsiveView<HomeController> {
                       minHeight: 720 / 3,
                     ),
                     child: Center(
-                      child: DefText('zxc').large,
+                      child: DefaultButton(
+                        onTap: () {},
+                        child: DefText('Login Google').large,
+                      ),
                     ),
                   ),
                 ),

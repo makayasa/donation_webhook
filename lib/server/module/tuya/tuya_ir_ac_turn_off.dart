@@ -1,6 +1,6 @@
 import 'package:get_server/get_server.dart';
 
-import '../../../app/controllers/tuya_controller.dart';
+import '../../controllers/tuya_controller.dart';
 
 class TuyaIrAcTurnOff extends GetView<TuyaController> {
   @override

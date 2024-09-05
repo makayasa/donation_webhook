@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import '../../utils/constant.dart';
+import '../utils/constant.dart';
 
 
 class DefText {

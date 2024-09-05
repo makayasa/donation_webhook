@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:saweria_webhook/app/controllers/components/default_button.dart';
-import 'package:saweria_webhook/app/controllers/components/default_text.dart';
+import 'package:saweria_webhook/app/components/default_button.dart';
+import 'package:saweria_webhook/app/components/default_text.dart';
 import 'package:saweria_webhook/app/utils/constant.dart';
 
 import '../controllers/create_webhook_command_controller.dart';

@@ -47,6 +47,9 @@ class TuyaController extends GetxController {
   }
 
   Future<void> checkTokenValidation() async {
+    // await tuyaGetToken(isRefresh: true);
+    // await tuyaRefreshToken();
+    // return;
     if (!await isTokenValid()) {
       logKey('TOKEN INVALID!!!', boxTuya.read(kTuyaAccessToken));
       boxTuya.erase();
@@ -58,7 +61,7 @@ class TuyaController extends GetxController {
   Future<void> tuyaGetToken({bool isRefresh = false}) async {
     final url = '$tuyaBaseUrl/$ver/token?grant_type=1';
     if (isRefresh) {
-      boxTuya.erase();
+      await boxTuya.erase();
     }
     var headers = _generateHeaderSignature(url: url).headers;
     try {
@@ -76,17 +79,20 @@ class TuyaController extends GetxController {
           ),
         );
       }
-      final t = DateTime.now().millisecondsSinceEpoch ~/ 1000;
       final data = res.data['result'] as Map<String, dynamic>;
-      data['created_time'] = t;
-
+      final int expireTime = data['expire_time'];
+      if (expireTime <= 0) {
+        await tuyaRefreshToken(refreshToken: data['refresh_token']);
+        return;
+      }
+      boxTuya.write(kTuyaRefreshToken, data['refresh_token']);
       boxTuya.write(kTuyaTokenMap, data);
       boxTuya.write(kTuyaAccessToken, data['access_token']);
-      boxTuya.write(kTuyaRefreshToken, data['refresh_token']);
-      boxTuya.write(kTuyaExpireTime, data['expire_time']);
-      boxTuya.write(kTuyaCreatedTime, data['created_time']);
+      // boxTuya.write(kTuyaExpireTime, data['expire_time']);
+      // boxTuya.write(kTuyaCreatedTime, data['created_time']);
 
       logKey('success write token', boxTuya.read(kTuyaAccessToken));
+      logKey('success write refresh token', boxTuya.read(kTuyaRefreshToken));
     } on DioException catch (e) {
       logKey('error auth', e.message);
       rethrow;
@@ -94,8 +100,8 @@ class TuyaController extends GetxController {
   }
 
   //* not working
-  Future<void> tuyaRefreshToken() async {
-    final refreshToken = boxTuya.read(kTuyaRefreshToken);
+  Future<void> tuyaRefreshToken({required String refreshToken}) async {
+    // final refreshToken = boxTuya.read(kTuyaRefreshToken);
     final url = '$tuyaBaseUrl/$ver/token/$refreshToken?grant_type=1';
     final headers = _generateHeaderSignature(url: url).headers;
     try {
@@ -107,17 +113,15 @@ class TuyaController extends GetxController {
       if (res.data['code'] == 1004) {
         return;
       }
-      final t = DateTime.now().millisecondsSinceEpoch ~/ 1000;
       final data = res.data['result'] as Map<String, dynamic>;
-      data['created_time'] = t;
 
       boxTuya.write(kTuyaTokenMap, data);
       boxTuya.write(kTuyaAccessToken, data['access_token']);
       boxTuya.write(kTuyaRefreshToken, data['refresh_token']);
-      boxTuya.write(kTuyaExpireTime, data['expire_time']);
-      boxTuya.write(kTuyaCreatedTime, data['created_time']);
+      logKey('token refreshed. New Token', data['access_token']);
     } on DioException catch (e) {
       logKey('error tuyaRefreshToken', e.message);
+      rethrow;
     }
   }
 
@@ -168,7 +172,7 @@ class TuyaController extends GetxController {
     } else {
       headers['access_token'] = accessToken;
     }
-    logKey('headers', headers);
+    // logKey('headers', headers);
     return (signature: sign, timeStamp: timestamp, nonce: nonce, headers: headers);
   }
 

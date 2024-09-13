@@ -38,6 +38,21 @@ class ServerController extends gs.GetxController {
         },
       );
     });
+
+    server.post(
+      ApiRoutes.TUYA_JEDAG_JEDUG,
+      (ctx) {
+        return gs.PayloadWidget(
+          builder: (context, payload) {
+            var tuyaC = gs.Get.find<TuyaController>();
+            tuyaC.jedagJedug(payload?['device_id'], payload?['is_on']).then(
+                  (value) => context.sendJson({'result': 'wow'}),
+                );
+            return const gs.WidgetEmpty();
+          },
+        );
+      },
+    );
   }
 
   String getForwardedUrl(String output) {

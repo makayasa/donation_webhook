@@ -318,7 +318,7 @@ class TuyaController extends GetxController {
     }
   }
 
-  void turnOn(String deviceId) async {
+  Future<void> turnOn(String deviceId) async {
     final url = '$tuyaBaseUrl/$ver/devices/$deviceId/commands';
     final commands = [
       {
@@ -334,21 +334,62 @@ class TuyaController extends GetxController {
       logKey('res turnOn', res.data);
     } on DioException catch (e) {
       logKey('error turnOff', e.message);
+      rethrow;
     }
   }
 
-  void jedagJedug(String deviceId, bool isOn) async {
+  Future<void> jedagJedug(String deviceId, bool isOn) async {
     final url = '$tuyaBaseUrl/$ver/devices/$deviceId/commands';
     final commands = [
-      {
-        'code': 'work_mode',
-        'value': isOn ? 'scene' : 'white',
-      }
+      !isOn
+          ? {
+              'code': 'work_mode',
+              'value': 'white',
+            }
+          : {
+              "code": "scene_data_v2",
+              "value": {
+                "scene_num": 7,
+                "scene_units": [
+                  {
+                    "bright": 0,
+                    "h": 0,
+                    "s": 1000,
+                    "temperature": 0,
+                    "unit_change_mode": "gradient",
+                    "unit_gradient_duration": 100,
+                    "unit_switch_duration": 100,
+                    "v": 1000
+                  },
+                  {
+                    "bright": 0,
+                    "h": 120,
+                    "s": 1000,
+                    "temperature": 0,
+                    "unit_change_mode": "gradient",
+                    "unit_gradient_duration": 100,
+                    "unit_switch_duration": 100,
+                    "v": 1000
+                  },
+                  {
+                    "bright": 0,
+                    "h": 240,
+                    "s": 1000,
+                    "temperature": 0,
+                    "unit_change_mode": "gradient",
+                    "unit_gradient_duration": 100,
+                    "unit_switch_duration": 100,
+                    "v": 1000
+                  }
+                ]
+              }
+            }
     ];
     final data = {'commands': jsonEncode(commands)};
     final headers = _generateHeaderSignature(url: url, httpMethod: 'POST', commands: commands).headers;
     try {
       // await checkTokenValidation();
+      await turnOn(deviceId);
       final Response res = await networkC.post(url, body: data, headers: headers);
       logKey('res jedagJedug', res.data);
     } on DioException catch (e) {
@@ -455,9 +496,9 @@ class TuyaController extends GetxController {
             return;
           }
           return;
-        } 
+        }
         _expiredTime.value--;
-        logKey('sisa waktu', _expiredTime.value);
+        // logKey('sisa waktu', _expiredTime.value);
       },
     );
   }

@@ -1,3 +1,7 @@
-var lampu_kamar_device_id = '3710228040f520e467e5';
-var lampu_kamar_ip = '192.168.0.49';
-var lampu_kamar_local_key = 'SYr{17(]+]CsIA7q';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+final lampuKamarDeviceId = dotenv.env['lampu_kamar_device_id'];
+final lampuKamarLocalIp = dotenv.env['lampu_kamar_ip'];
+final lampuKamarLocalKey = dotenv.env['lampu_kamar_local_key'];
+
+final lampuMejaDeviceId = dotenv.env['lampu_meja_device_id'];

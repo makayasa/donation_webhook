@@ -31,6 +31,8 @@ dependencies:
   uuid: ^4.4.0
   connectivity_plus: ^6.0.3
   googleapis_auth: ^1.6.0
+  watcher: ^1.1.0
+  flutter_dotenv: ^5.1.0
   # dart_autogui: ^0.0.1
 
 dev_dependencies: 
@@ -43,4 +45,5 @@ flutter:
 
 assets:
   - ssl/
+  - .env
 

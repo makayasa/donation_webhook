@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -6,14 +7,18 @@ import 'package:get/get.dart';
 import 'package:get_server/get_server.dart' as gs;
 import 'package:get_storage/get_storage.dart';
 import 'package:obs_websocket/obs_websocket.dart';
+import 'package:saweria_webhook/app/utils/environment.dart';
 import 'package:saweria_webhook/server/controllers/server_controller.dart';
 import 'package:saweria_webhook/server/controllers/tuya_controller.dart';
 import 'package:saweria_webhook/server/controllers/webhook_controller.dart';
+import 'package:watcher/watcher.dart';
 
 import '../../../utils/function_utils.dart';
 
 class HomeController extends GetxController {
   var box = GetStorage();
+
+  final pathText = r'D:\Program Files\souls dc\YOU_DIED.txt';
 
   var formKeyNgrok = GlobalKey<FormBuilderState>();
   var formKeyObs = GlobalKey<FormBuilderState>();
@@ -38,6 +43,8 @@ class HomeController extends GetxController {
     // logKey('value', value);
     serverC.ngrok(url: url, ip: ip, port: port);
   }
+
+  // Watcher watcher = Watcher(r"D:\death_count.txt");
 
   final obsWebSocket = Rxn<ObsWebSocket>();
   void connectObs() async {
@@ -250,6 +257,13 @@ class HomeController extends GetxController {
     }
   }
 
+  final watcher = FileWatcher(
+    r'D:\Program Files\souls dc\YOU_DIED.txt',
+    pollingDelay: const Duration(
+      // milliseconds: 10,
+      seconds: 1,
+    ),
+  );
   @override
   void onInit() {
     super.onInit();
@@ -269,6 +283,25 @@ class HomeController extends GetxController {
     } else {
       saweriaC = gs.Get.put(WebhookController());
     }
+    final file = File(r'D:\Program Files\souls dc\YOU_DIED.txt');
+
+    final currentDeath = RxInt(0);
+
+    watcher.events.listen(
+      (event) async {
+        final content = await file.readAsString();
+        // logKey('changed', event.type);
+        // logKey('changed', event.reactive);
+        final deathCount = int.tryParse(content.split(' ').last) ?? 0;
+        logKey('content', content);
+        if (deathCount > currentDeath.value) {
+          currentDeath.value = deathCount;
+          await tuyaC.turnOff(lampuKamarDeviceId);
+          await Future.delayed(const Duration(seconds: 4));
+          await tuyaC.turnOn(lampuKamarDeviceId);
+        }
+      },
+    );
   }
 
   @override

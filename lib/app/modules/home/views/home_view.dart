@@ -22,6 +22,8 @@ class HomeView extends GetResponsiveView<HomeController> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          // controller.tuyaC.turnOn(lampuKamarDeviceId);
+          // return;
           Get.toNamed(Routes.CREATE_WEBHOOK_COMMAND);
           // controller.obsWebSocket.close();
           // controller.sourceStateChangedAllScene('Main Monitor');

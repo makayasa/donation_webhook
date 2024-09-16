@@ -295,7 +295,7 @@ class TuyaController extends GetxController {
   //   runCommand(pyautoguiCommand: tuya);
   // }
 
-  void turnOff(String deviceId) async {
+  Future<void> turnOff(String deviceId) async {
     final url = '$tuyaBaseUrl/$ver/devices/$deviceId/commands';
     final commands = [
       {

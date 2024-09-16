@@ -13,9 +13,12 @@ import 'package:window_manager/window_manager.dart';
 import 'app/routes/app_pages.dart';
 
 void main() async {
-  await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  await dotenv.load(
+    // fileName: 'dotenv.env',
+    // fileName: r'C:\Users\rifqi\Documents\Projects\Flutter Projects\saweria_webhook\dotenv.env',
+  );
   launchAtStartup.setup(
     appName: packageInfo.appName,
     appPath: Platform.resolvedExecutable,

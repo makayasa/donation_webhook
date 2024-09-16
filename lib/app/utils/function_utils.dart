@@ -42,10 +42,7 @@ dynamic runCommand({bool isPython3 = false, required String pyautoguiCommand}) {
 }
 
 dynamic startNgrok({required String url, required String ip, required String port}) async {
-  // return run('ngrok http 192.168.0.2:7070 --log-format=json --log=stdout');
-  // "ngrok", "http", "--domain=turkey-amazed-regularly.ngrok-free.app", "192.168.0.2:7070"
   final res = await run(
-    // 'ngrok http --domain=turkey-amazed-regularly.ngrok-free.app 192.168.0.2:7070 --log-format=json --log=stdout',
     'ngrok http --domain=$url $ip:$port --log-format=json --log=stdout',
     onProcess: (process) async {
       logKey('startNgrok', process.pid);
@@ -53,10 +50,7 @@ dynamic startNgrok({required String url, required String ip, required String por
   ).catchError(
     (a) async {
       logKey('catchError');
-      Get.snackbar(
-          'Error',
-          // 'Ngrok Error, please stop on NGROK dashboard\nthen restart again',
-          'Ngrok is already running');
+      Get.snackbar('Error', 'Ngrok is already running');
       return a;
     },
   );
@@ -65,7 +59,7 @@ dynamic startNgrok({required String url, required String ip, required String por
 }
 
 String tuyaInit() {
-  return "import tinytuya; lampu_kamar = tinytuya.BulbDevice('$lampu_kamar_device_id', '$lampu_kamar_ip', '$lampu_kamar_local_key', version=3.3);";
+  return "import tinytuya; lampu_kamar = tinytuya.BulbDevice('$lampuKamarDeviceId', '$lampuKamarLocalIp', '$lampuKamarLocalKey', version=3.3);";
 }
 
 void dropWeapon(bool valorantMode) async {

@@ -29,10 +29,10 @@ class WebhookController extends GetxController {
     }
     if (msg.contains(SaweriaMessageHelper.ON)) {
       logKey('msg', msg);
-      tuyaC.turnOn(lampu_kamar_device_id);
+      tuyaC.turnOn(lampuKamarDeviceId);
       return;
     } else if (msg.contains(SaweriaMessageHelper.OFF)) {
-      tuyaC.turnOff(lampu_kamar_device_id);
+      tuyaC.turnOff(lampuKamarDeviceId);
       return;
     } else if (msg.contains(SaweriaMessageHelper.DROP)) {
       dropWeapon(_isValo);
@@ -56,9 +56,9 @@ class WebhookController extends GetxController {
 
     // if (data.soundboardOptionId == '362dd29d-34eb-4492-a95b-45608a9edb5f') {
     if (data.soundboardSoundId == '362dd29d-34eb-4492-a95b-45608a9edb5f') {
-      tuyaC.turnOff(lampu_kamar_device_id);
+      tuyaC.turnOff(lampuKamarDeviceId);
     } else if (data.soundboardSoundId == 'f7afed74-4a3e-468f-9779-cead122e7781') {
-      tuyaC.turnOn(lampu_kamar_device_id);
+      tuyaC.turnOn(lampuKamarDeviceId);
     } else if (data.soundboardSoundId == 'dfe8802b-1ca0-4a6a-a2e1-e1c0b3b2e321' && box.read('valo')) {
       dropWeapon(true);
     }

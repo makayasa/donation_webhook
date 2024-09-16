@@ -46,6 +46,18 @@ class HomeView extends GetResponsiveView<HomeController> {
         },
       ),
       drawerScrimColor: Colors.transparent,
+      appBar: AppBar(
+        backgroundColor: kBgWhite,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Get.toNamed(Routes.SETTING);
+            },
+            icon: const Icon(Icons.settings),
+          ),
+          const SizedBox(width: 10),
+        ],
+      ),
       body: Row(
         children: [
           Expanded(

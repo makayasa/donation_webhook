@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:get_server/get_server.dart' as gs;
 import 'package:get_storage/get_storage.dart';
 import 'package:obs_websocket/obs_websocket.dart';
+import 'package:saweria_webhook/app/utils/constant.dart';
 import 'package:saweria_webhook/app/utils/environment.dart';
 import 'package:saweria_webhook/server/controllers/server_controller.dart';
 import 'package:saweria_webhook/server/controllers/tuya_controller.dart';
@@ -257,6 +258,7 @@ class HomeController extends GetxController {
     }
   }
 
+  //* elden ring file
   final watcher = FileWatcher(
     r'D:\Program Files\souls dc\YOU_DIED.txt',
     pollingDelay: const Duration(
@@ -264,6 +266,7 @@ class HomeController extends GetxController {
       seconds: 1,
     ),
   );
+
   @override
   void onInit() {
     super.onInit();
@@ -283,18 +286,23 @@ class HomeController extends GetxController {
     } else {
       saweriaC = gs.Get.put(WebhookController());
     }
+
+    eldenRingDeathCount();
+  }
+
+  void eldenRingDeathCount() {
     final file = File(r'D:\Program Files\souls dc\YOU_DIED.txt');
-
     final currentDeath = RxInt(0);
-
     watcher.events.listen(
       (event) async {
         final content = await file.readAsString();
-        // logKey('changed', event.type);
-        // logKey('changed', event.reactive);
         final deathCount = int.tryParse(content.split(' ').last) ?? 0;
         logKey('content', content);
         if (deathCount > currentDeath.value) {
+          final bool isEldenRingMode = box.read(kEldenRingMode);
+          if (!isEldenRingMode) {
+            return;
+          }
           currentDeath.value = deathCount;
           await tuyaC.turnOff(lampuKamarDeviceId);
           await Future.delayed(const Duration(seconds: 4));

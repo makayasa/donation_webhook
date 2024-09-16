@@ -9,6 +9,7 @@ import 'tuya_controller.dart';
 
 class ServerController extends gs.GetxController {
   final test = false.obs;
+  final port = 7070;
   // var server = gs.GetServerApp(
   //   host: '192.168.0.2',
   //   port: 7070,
@@ -17,14 +18,14 @@ class ServerController extends gs.GetxController {
   //   // privateKey: 'ssl/keymkys.key',
   // );
 
-  var server = gs.GetServer(
-    host: '192.168.0.2',
-    port: 7070,
-    getPages: ApiPages.routes,
-  );
+  // var server = gs.GetServer();
+  late gs.GetServer server;
 
-  void initServer() {
-    logKey('masuk init server');
+  void initServer() async {
+    server = gs.GetServer(
+      port: port,
+      getPages: ApiPages.routes,
+    );
     server.post(ApiRoutes.TUYA, (ctx) {
       return gs.PayloadWidget(
         builder: (context, payload) {
@@ -34,7 +35,7 @@ class ServerController extends gs.GetxController {
                   {'result': value},
                 ),
               );
-          return gs.WidgetEmpty();
+          return const gs.WidgetEmpty();
         },
       );
     });

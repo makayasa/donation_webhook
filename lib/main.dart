@@ -53,6 +53,7 @@ void main() async {
       initialBinding: GlobalBindings(),
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // scaffoldBackgroundColor: kPrimaryColor,
         appBarTheme: const AppBarTheme(

@@ -43,3 +43,6 @@ const kTuyaRefreshToken = 'refresh_token';
 const kTuyaExpireTime = 'expire_time';
 const kTuyaCreatedTime = 'created_time';
 // const kTuyaRefreshToken = 'tuya_refresh_token';
+
+const kValorantMode = 'valorant_mode';
+const kEldenRingMode = 'elden_ring_mode';

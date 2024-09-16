@@ -6,6 +6,7 @@ abstract class Routes {
   static const HOME = _Paths.HOME;
   static const CREATE_COMMAND = '/create-command';
   static const CREATE_WEBHOOK_COMMAND = '/create-webhook-command';
+  static const SETTING = '/setting';
 }
 
 abstract class _Paths {

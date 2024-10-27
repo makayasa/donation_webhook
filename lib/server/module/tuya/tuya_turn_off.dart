@@ -1,21 +1,26 @@
 // import 'package:flutter/material.dart';
 import 'package:get_server/get_server.dart' as gs;
-import 'package:saweria_webhook/app/utils/function_utils.dart';
+import 'package:saweria_webhook/app/utils/constant.dart';
 import 'package:saweria_webhook/server/controllers/tuya_controller.dart';
+import 'package:saweria_webhook/server/models/tuya_payload_models.dart';
 // import 'get'
 
 class TuyaTurnOff extends gs.GetView<TuyaController> {
   @override
   build(gs.BuildContext context) {
     var req = context.request.query;
+    // logger.i(context.request.path);
     context.request.payload().then((value) {
-      logKey('masuk off', value);
-      //{"device_id":"3710228040f520e467e5"}
-      controller.turnOff(value?['device_id']);
+      try {
+        logger.i(value, error: context.request.path);
+        final data = TuyaPayloadModels.fromJson(value as Map<String, dynamic>);
+        controller.turnOff(data.deviceId);
+      } catch (e) {
+        logger.e('Error ${context.request.path}', error: e);
+      }
     });
-    logKey('req saweria', req);
     return gs.Json(
-      {'res': 'resss'},
+      const {'res': 'resss'},
     );
   }
 }

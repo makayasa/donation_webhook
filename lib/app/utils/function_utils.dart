@@ -3,6 +3,7 @@ import 'dart:developer' as dev;
 
 import 'package:get/get.dart';
 import 'package:process_run/cmd_run.dart';
+import 'package:saweria_webhook/app/utils/network_controller.dart';
 
 import '../../helpers/saweria_message_helper.dart';
 import 'environment.dart';
@@ -66,8 +67,16 @@ void dropWeapon(bool valorantMode) async {
   if (!valorantMode) {
     return;
   }
-  var commandString = "pyautogui.press('1'); pyautogui.press('g');";
-  runCommand(pyautoguiCommand: commandString);
+  // var commandString = "pyautogui.press('1'); pyautogui.press('g');";
+  // runCommand(pyautoguiCommand: commandString);
+  final networkC = Get.find<NetworkController>();
+  try {
+    await networkC.post(
+      'http://127.0.0.1:6969/keyboard_event/drop_weapon',
+    );
+  } catch (e) {
+    logKey('error dropWeapon', e);
+  }
 }
 
 void allChat(String message, bool valorantMode) async {

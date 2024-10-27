@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 
 const kPrimaryColor = Color(0XFFF3EEEA);
 const kSecondaryColor = Color(0XFFEBE3D5);
@@ -22,6 +23,21 @@ TextStyle get kDefaultTextStyle {
     fontWeight: FontWeight.normal,
   );
 }
+
+final logger = Logger(
+  printer: kDefaultPrettyPrinter,
+);
+
+final kDefaultPrettyPrinter = PrettyPrinter(
+  methodCount: 2,
+  errorMethodCount: 3,
+  lineLength: 120,
+  dateTimeFormat: DateTimeFormat.dateAndTime,
+  levelColors: {
+    Level.trace : const AnsiColor.fg(250),
+    Level.info: const AnsiColor.fg(217)
+  },
+);
 
 const kScreenChangePoint = ResponsiveScreenSettings(
   desktopChangePoint: 850,

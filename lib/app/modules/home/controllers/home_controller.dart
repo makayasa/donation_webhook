@@ -271,21 +271,37 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     valorantMode.value = box.read('valo');
+
+    // gs.runApp(
+    //   gs.GetServerApp(
+    //     port: 7070,
+    //     // useLog: false,
+    //     initialBinding: ServerBindings(),
+    //     getPages: ApiPages.routes,
+    //   ),
+    // );
+
+    // var a =gs.Get.find<gs.GetServerController>();
+    // a.
+
+
+    // if (Get.isRegistered<ServerController>()) {
+    //   serverC = gs.Get.find<ServerController>();
+    // } else {
+    //   serverC = gs.Get.put(ServerController());
+    // }
+
     if (gs.Get.isRegistered<TuyaController>()) {
       tuyaC = gs.Get.find<TuyaController>();
     } else {
       tuyaC = gs.Get.put(TuyaController());
     }
-    if (Get.isRegistered<ServerController>()) {
-      serverC = gs.Get.find<ServerController>();
-    } else {
-      serverC = gs.Get.put(ServerController());
-    }
-    if (gs.Get.isRegistered<WebhookController>()) {
-      saweriaC = gs.Get.find<WebhookController>();
-    } else {
-      saweriaC = gs.Get.put(WebhookController());
-    }
+
+    // if (gs.Get.isRegistered<WebhookController>()) {
+    //   saweriaC = gs.Get.find<WebhookController>();
+    // } else {
+    //   saweriaC = gs.Get.put(WebhookController());
+    // }
 
     eldenRingDeathCount();
   }
@@ -336,3 +352,5 @@ class HomeController extends GetxController {
   //   await Keyboard.typeWord('Adib Mohsin', interval: 0);
   // }
 }
+
+

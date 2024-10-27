@@ -1,7 +1,7 @@
 // import 'package:flutter/material.dart';
 import 'package:get/get.dart' as gett;
 import 'package:get_server/get_server.dart' as gs;
-import 'package:saweria_webhook/app/utils/function_utils.dart';
+import 'package:saweria_webhook/app/utils/constant.dart';
 import 'package:saweria_webhook/server/controllers/webhook_controller.dart';
 import 'package:saweria_webhook/server/models/saweria_payload_models.dart';
 import 'package:saweria_webhook/server/models/tako_payload_models.dart';
@@ -17,7 +17,7 @@ class Webhook extends gs.GetView<WebhookController> {
     // }
     var req = context.request.query;
     context.request.payload().then((value) {
-      logKey('payload', value);
+      // logKey('payload', value);
       var homeC = gett.Get.find<HomeController>();
       if (value == null) {
         return;
@@ -29,20 +29,23 @@ class Webhook extends gs.GetView<WebhookController> {
             'asd': homeC.hideSourceOnAllScene('Webcam'),
           };
           a['asd'];
-          logKey('donasi saweria');
+          logger.t('Donasi Saweria');
+          // logKey('donasi saweria');
           SaweriaPayloadModels data = SaweriaPayloadModels.fromJson(value);
           controller.donationSaweria(data);
         } else {
           // homeC.showSourceOnAllScene('Webcam');
           final data = TakoPayloadModel.fromJson(value);
-          logKey('donasi tako', data.toJson());
+          logger.t('Donasi Tako\n${data.toJson()}');
+          // logKey('donasi tako', data.toJson());
           controller.donationTako(data);
         }
       } catch (e) {
-        logKey('error Saweria', e.toString());
+        // logKey('error Saweria', e.toString());
+        logger.e('error webhook', error: e);
       }
     });
-    logKey('req saweria', req);
+    // logKey('req saweria', req);
     return gs.Json(
       {'res': 'resss'},
     );

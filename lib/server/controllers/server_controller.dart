@@ -1,5 +1,8 @@
 import 'package:get_server/get_server.dart' as gs;
+import 'package:saweria_webhook/app/settings/server_bindings.dart';
+import 'package:saweria_webhook/app/utils/constant.dart';
 import 'package:saweria_webhook/app/utils/function_utils.dart';
+import 'package:saweria_webhook/server/models/tuya_payload_models.dart';
 import 'package:saweria_webhook/server/routes/api_routes.dart';
 
 import '../routes/api_pages.dart';
@@ -24,17 +27,27 @@ class ServerController extends gs.GetxController {
   void initServer() async {
     server = gs.GetServer(
       port: port,
+      useLog: false,
       getPages: ApiPages.routes,
+      initialBinding: ServerBindings(),
     );
+
     server.post(ApiRoutes.TUYA, (ctx) {
       return gs.PayloadWidget(
         builder: (context, payload) {
           var tuyaC = gs.Get.find<TuyaController>();
-          tuyaC.getDeviceDetails(payload?['device_id']).then(
-                (value) => context.sendJson(
-                  {'result': value},
-                ),
-              );
+          try {
+            final data = TuyaPayloadModels.fromJson(payload as Map<String, dynamic>);
+            tuyaC.getDeviceDetails(data.deviceId).then(
+                  (value) => context.sendJson(
+                    {'result': value},
+                  ),
+                );
+            logger.i(payload, error: context.request.path);
+          } catch (e) {
+            logger.e('Error ${context.request.path}', error: e);
+          }
+
           return const gs.WidgetEmpty();
         },
       );

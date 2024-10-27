@@ -5,8 +5,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:launch_at_startup/launch_at_startup.dart';
+import 'package:loggy/loggy.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:saweria_webhook/app/settings/global_bindings.dart';
+import 'package:saweria_webhook/app/utils/my_log_printer.dart';
 import 'package:saweria_webhook/app/utils/constant.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -16,8 +18,18 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   await dotenv.load(
-    // fileName: 'dotenv.env',
-    // fileName: r'C:\Users\rifqi\Documents\Projects\Flutter Projects\saweria_webhook\dotenv.env',
+      // fileName: 'dotenv.env',
+      // fileName: r'C:\Users\rifqi\Documents\Projects\Flutter Projects\saweria_webhook\dotenv.env',
+      );
+  Loggy.initLoggy(
+    // logPrinter: const PrettyPrinter(
+    //   showColors: true,
+    // ),
+    logPrinter: MyLogPrinter(),
+    logOptions: const LogOptions(
+      LogLevel.all,
+      stackTraceLevel: LogLevel.off,
+    ),
   );
   launchAtStartup.setup(
     appName: packageInfo.appName,
@@ -54,6 +66,14 @@ void main() async {
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
       debugShowCheckedModeBanner: false,
+      // enableLog: false,
+      // logWriterCallback: (text, {bool? isError}) {
+      //   if (isError ?? false) {
+      //     logger.e(text);
+      //   } else {
+      //     logger.w(text);
+      //   }
+      // },
       theme: ThemeData(
         // scaffoldBackgroundColor: kPrimaryColor,
         appBarTheme: const AppBarTheme(

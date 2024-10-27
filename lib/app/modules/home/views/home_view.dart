@@ -23,7 +23,8 @@ class HomeView extends GetResponsiveView<HomeController> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           // controller.tuyaC.turnOn(lampuKamarDeviceId);
-          // return;
+          logger.t(controller.tuyaC.checkTimer());
+          return;
           Get.toNamed(Routes.CREATE_WEBHOOK_COMMAND);
           // controller.obsWebSocket.close();
           // controller.sourceStateChangedAllScene('Main Monitor');
@@ -47,7 +48,9 @@ class HomeView extends GetResponsiveView<HomeController> {
       ),
       drawerScrimColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: kBgWhite,
+        backgroundColor: kPrimaryColor,
+        shadowColor: kBgBlack,
+        elevation: .8,
         actions: [
           IconButton(
             onPressed: () {
@@ -64,24 +67,25 @@ class HomeView extends GetResponsiveView<HomeController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      child: DefText('Valorant Mode').normal,
-                    ),
-                    const SizedBox(height: 10),
-                    Obx(
-                      () => Switch(
-                        value: controller.valorantMode.value,
-                        onChanged: (value) {
-                          controller.valorantMode.value = value;
-                          controller.box.write('valo', controller.valorantMode.value);
-                        },
-                      ),
-                    )
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     Container(
+                //       child: DefText('Valorant Mode').normal,
+                //     ),
+                //     const SizedBox(height: 10),
+                //     Obx(
+                //       () => Switch(
+                //         value: controller.valorantMode.value,
+                //         onChanged: (value) {
+                //           controller.valorantMode.value = value;
+                //           controller.box.write('valo', controller.valorantMode.value);
+                //         },
+                //       ),
+                //     )
+                //   ],
+                // ),
+                Container(),
               ],
             ),
           ),

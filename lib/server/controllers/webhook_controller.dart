@@ -1,6 +1,7 @@
 import 'package:get/get.dart' as g;
 import 'package:get_server/get_server.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:saweria_webhook/app/utils/constant.dart';
 import 'package:saweria_webhook/app/utils/environment.dart';
 import 'package:saweria_webhook/server/controllers/tuya_controller.dart';
 import 'package:saweria_webhook/server/models/tako_payload_models.dart';
@@ -46,13 +47,17 @@ class WebhookController extends GetxController {
   void donationTako(TakoPayloadModel data) async {
     HomeController homeC = g.Get.find<HomeController>();
     // HomeController homeC = g.Get.put(HomeController());
-    var _isValo = box.read('valo');
+    var isValo = box.read(kValorantMode);
     String msg = data.message;
     if (data.amount < 0 && data.type != 'SOUNDBOARD') {
       return;
     }
+    if (isValo) {
+      dropWeapon(isValo);
+    }
 
-    logKey('masuk ke tako', data.soundboardSoundId);
+
+    // logKey('masuk ke tako', data.soundboardSoundId);
 
     // if (data.soundboardOptionId == '362dd29d-34eb-4492-a95b-45608a9edb5f') {
     if (data.soundboardSoundId == '362dd29d-34eb-4492-a95b-45608a9edb5f') {

@@ -7,12 +7,16 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart' as g hide Response;
 import 'package:get_server/get_server.dart' hide Response;
 import 'package:get_storage/get_storage.dart';
+import 'package:logger/logger.dart';
 import 'package:saweria_webhook/app/utils/constant.dart';
 import 'package:saweria_webhook/app/utils/function_utils.dart';
 import 'package:saweria_webhook/app/utils/network_controller.dart';
 import 'package:uuid/uuid.dart';
 
 class TuyaController extends GetxController {
+  var logger = Logger(
+    printer: kDefaultPrettyPrinter,
+  );
   final _expiredTime = RxInt(0);
 
   Timer? timer;
@@ -94,7 +98,8 @@ class TuyaController extends GetxController {
       // logKey('success write token', boxTuya.read(kTuyaAccessToken));
       // logKey('success write refresh token', boxTuya.read(kTuyaRefreshToken));
     } on DioException catch (e) {
-      logKey('error auth', e.message);
+      // logKey('error auth', e.message);
+      logger.e('Error tuyaGetToken', error: e);
       rethrow;
     }
   }
@@ -120,7 +125,7 @@ class TuyaController extends GetxController {
       boxTuya.write(kTuyaTokenMap, data);
       boxTuya.write(kTuyaAccessToken, data['access_token']);
       boxTuya.write(kTuyaRefreshToken, data['refresh_token']);
-      logKey('token refreshed. New Token', data['access_token']);
+      // logKey('token refreshed. New Token', data['access_token']);
     } on DioException catch (e) {
       logKey('error tuyaRefreshToken', e.message);
       rethrow;
@@ -133,7 +138,7 @@ class TuyaController extends GetxController {
     String httpMethod = 'GET',
     bool isRefreshToken = false,
   }) {
-    final accessToken = isRefreshToken ? boxTuya.read(kTuyaRefreshToken) ?? '' : boxTuya.read(kTuyaAccessToken) ?? '';
+    var accessToken = isRefreshToken ? boxTuya.read(kTuyaRefreshToken) ?? '' : boxTuya.read(kTuyaAccessToken) ?? '';
     String timestamp = (DateTime.now().millisecondsSinceEpoch).toString();
     String nonce = const Uuid().v4();
     String contentSha256;
@@ -295,7 +300,7 @@ class TuyaController extends GetxController {
   //   runCommand(pyautoguiCommand: tuya);
   // }
 
-  Future<void> turnOff(String deviceId) async {
+  Future<void> turnOff(String deviceId, {int count = 0}) async {
     final url = '$tuyaBaseUrl/$ver/devices/$deviceId/commands';
     final commands = [
       {
@@ -304,21 +309,28 @@ class TuyaController extends GetxController {
       }
     ];
     final data = {'commands': jsonEncode(commands)};
-    final headers = _generateHeaderSignature(url: url, commands: commands, httpMethod: 'POST').headers;
     try {
+      if (count >= 5) {
+        throw Exception('Limit reached, try again');
+      }
       await checkTokenValidation();
+      final headers = _generateHeaderSignature(url: url, commands: commands, httpMethod: 'POST').headers;
       final Response res = await networkC.post(url, body: data, headers: headers);
-      logKey('res turnOff', res.data);
       if (res.data?['code'] == 1010 && res.data?['msg'] == 'token invalid') {
+        // if (true) {
         await tuyaGetToken();
-        turnOnAc(deviceId);
+        await turnOff(deviceId, count: count + 1);
+      } else {
+        logger.i('success turnOff');
       }
     } on DioException catch (e) {
-      logKey('error turnOff', e.message);
+      logger.e('Error turnoff', error: e);
+    } catch (e) {
+      logger.w('Error turnOff', error: e);
     }
   }
 
-  Future<void> turnOn(String deviceId) async {
+  Future<void> turnOn(String deviceId, {int count = 0}) async {
     final url = '$tuyaBaseUrl/$ver/devices/$deviceId/commands';
     final commands = [
       {
@@ -327,13 +339,22 @@ class TuyaController extends GetxController {
       }
     ];
     final data = {'commands': jsonEncode(commands)};
-    final headers = _generateHeaderSignature(httpMethod: 'POST', url: url, commands: commands).headers;
     try {
+      if (count >= 5) {
+        throw Exception('Limit reached, try again');
+      }
       await checkTokenValidation();
+      final headers = _generateHeaderSignature(httpMethod: 'POST', url: url, commands: commands).headers;
       final Response res = await networkC.post(url, body: data, headers: headers);
-      logKey('res turnOn', res.data);
+      if (res.data?['code'] == 1010 && res.data?['msg'] == 'token invalid') {
+        await tuyaGetToken();
+        await turnOn(deviceId, count: count + 1);
+      } else {
+        logger.i('success turnOn');
+      }
     } on DioException catch (e) {
-      logKey('error turnOff', e.message);
+      // logKey('error turnOff', e.message);
+      logger.e('error turnon', error: e);
       rethrow;
     }
   }
@@ -473,12 +494,19 @@ class TuyaController extends GetxController {
     try {
       await checkTokenValidation();
       final Response res = await networkC.get(url, headers: headers);
-      logKey('res getDeviceDetails', res.data);
+      // logKey('res getDeviceDetails', res.data);
       return res.data['result'];
     } on DioException catch (e) {
-      logKey('error getDeviceDetails', e.message);
+      // logKey('error getDeviceDetails', e.message);
+      logger.e('Error getDeviceDetails', error: e);
       return [];
     }
+  }
+
+  String checkTimer() {
+    var _timer = '';
+    _timer = _expiredTime.value.toString();
+    return _timer;
   }
 
   void setupTimer() {

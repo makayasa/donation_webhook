@@ -59,15 +59,17 @@ class HomeController extends GetxController {
       obsWebSocket.value = await ObsWebSocket.connect(
         'ws://${value['ip']}:${value['port']}',
         onDone: () {
-          logKey('onDone');
+          // logKey('onDone');
           isObsConnected.value = false;
         },
         fallbackEventHandler: (Event event) {
-          logKey('fallbackEventHandler ${event.eventType}', event.eventData);
+          // logKey('fallbackEventHandler ${event.eventType}', event.eventData);
+          // logger.t(event.eventData, error: 'fallbackEventHandler');
         },
       );
       obsWebSocket.value!.broadcastStream.listen((event) {
-        logKey('listening', event.toString());
+        // logKey('listening', event.toString());
+        // logger.t(event.toString(), error: 'obs Listening');
       });
       await obsWebSocket.value!.listen(EventSubscription.general.code);
       obsWebSocket.value!.addHandler<ExitStarted>(() {
@@ -168,6 +170,22 @@ class HomeController extends GetxController {
   }
 
   void hideSourceOnCurrentScene(String sourceName) async {}
+
+  Future<void> playMediaSource(String sourceName) async {
+    try {
+      await obsWebSocket.value!.sendRequest(
+        Request(
+          'TriggerMediaInputAction',
+          requestData: {
+            'inputName': sourceName,
+            'mediaAction': 'OBS_WEBSOCKET_MEDIA_INPUT_ACTION_RESTART',
+          },
+        ),
+      );
+    } catch (e) {
+      logger.e('error', error: e);
+    }
+  }
 
   Future<void> toggleSourceOnActiveScene(String sourceName, {String? sceneName}) async {
     try {
@@ -284,12 +302,11 @@ class HomeController extends GetxController {
     // var a =gs.Get.find<gs.GetServerController>();
     // a.
 
-
-    // if (Get.isRegistered<ServerController>()) {
-    //   serverC = gs.Get.find<ServerController>();
-    // } else {
-    //   serverC = gs.Get.put(ServerController());
-    // }
+    if (Get.isRegistered<ServerController>()) {
+      serverC = gs.Get.find<ServerController>();
+    } else {
+      serverC = gs.Get.put(ServerController());
+    }
 
     if (gs.Get.isRegistered<TuyaController>()) {
       tuyaC = gs.Get.find<TuyaController>();
@@ -352,5 +369,3 @@ class HomeController extends GetxController {
   //   await Keyboard.typeWord('Adib Mohsin', interval: 0);
   // }
 }
-
-

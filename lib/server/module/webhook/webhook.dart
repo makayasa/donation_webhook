@@ -36,6 +36,7 @@ class Webhook extends gs.GetView<WebhookController> {
         } else {
           // homeC.showSourceOnAllScene('Webcam');
           final data = TakoPayloadModel.fromJson(value);
+          logger.t('Donasi Tako\n $value');
           logger.t('Donasi Tako\n${data.toJson()}');
           // logKey('donasi tako', data.toJson());
           controller.donationTako(data);

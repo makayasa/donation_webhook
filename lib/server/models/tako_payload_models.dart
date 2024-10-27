@@ -8,6 +8,7 @@ class TakoPayloadModel {
     required this.message,
     required this.amount,
     this.soundboardSoundId,
+    this.soundboardName,
     required this.gifUrl,
     required this.creatorId,
   });
@@ -19,6 +20,7 @@ class TakoPayloadModel {
   String message;
   int amount;
   String? soundboardSoundId;
+  String? soundboardName;
   String gifUrl;
   String creatorId;
 
@@ -31,6 +33,7 @@ class TakoPayloadModel {
         message: json['message'] ?? '',
         amount: json['amount'],
         soundboardSoundId: json['soundboardSoundId'],
+        soundboardName: json['soundboardName'],
         gifUrl: json['gifUrl'] ?? '',
         creatorId: json['creatorId'] ?? '',
       );
@@ -46,6 +49,7 @@ class TakoPayloadModel {
         "gifUrl": gifUrl,
         // "pollingOptionId": null,
         "soundboardSoundId": soundboardSoundId ?? '',
+        'soundboardName': soundboardName,
         // "ttvVoteOptionId": null,
         // "userId": null,
         "creatorId": creatorId,

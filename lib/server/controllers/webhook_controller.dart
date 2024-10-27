@@ -56,16 +56,19 @@ class WebhookController extends GetxController {
       dropWeapon(isValo);
     }
 
-
     // logKey('masuk ke tako', data.soundboardSoundId);
 
     // if (data.soundboardOptionId == '362dd29d-34eb-4492-a95b-45608a9edb5f') {
+    // await homeC.toggleSourceOnActiveScene('Awoo');
+
     if (data.soundboardSoundId == '362dd29d-34eb-4492-a95b-45608a9edb5f') {
       tuyaC.turnOff(lampuKamarDeviceId);
     } else if (data.soundboardSoundId == 'f7afed74-4a3e-468f-9779-cead122e7781') {
       tuyaC.turnOn(lampuKamarDeviceId);
     } else if (data.soundboardSoundId == 'dfe8802b-1ca0-4a6a-a2e1-e1c0b3b2e321' && box.read('valo')) {
       dropWeapon(true);
+    } else if (data.soundboardSoundId == 'cb570f65-753b-41d0-8a4e-e41564cc88dc') {
+      await homeC.playMediaSource('Awoo');
     }
     // await homeC.toggleSourceOnActiveScene('Mixer AG06', sceneName: 'Audio');
     // await homeC.toggleSourceOnActiveScene('Logitech Webcam');

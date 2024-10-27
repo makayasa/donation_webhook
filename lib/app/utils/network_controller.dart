@@ -2,13 +2,11 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_loggy_dio/flutter_loggy_dio.dart';
 import 'package:get/get.dart' hide Response, FormData;
-import 'package:logger/logger.dart';
 // import 'package:http/http.dart' hide Response;
 // import 'package:get/get_connect.dart' hide Re;
 
 class NetworkController extends GetxController {
   final Dio _dio = Dio();
-  final logger = Logger();
 // _dio;
 
   @override

@@ -60,9 +60,11 @@ class TuyaController extends GetxController {
     // }
   }
 
-  Future<void> tuyaGetToken() async {
+  Future<void> tuyaGetToken({bool isRefresh = false}) async {
     final url = '$tuyaBaseUrl/$ver/token?grant_type=1';
-    await boxTuya.erase();
+    if (isRefresh) {
+      await boxTuya.erase();
+    }
     var headers = _generateHeaderSignature(url: url).headers;
     try {
       final Response res = await networkC.get(
@@ -85,7 +87,7 @@ class TuyaController extends GetxController {
       //   await tuyaRefreshToken(refreshToken: data['refresh_token']);
       //   return;
       // }
-      boxTuya.write(kTuyaRefreshToken, data['refresh_token']);
+      // boxTuya.write(kTuyaRefreshToken, data['refresh_token']);
       boxTuya.write(kTuyaTokenMap, data);
       boxTuya.write(kTuyaAccessToken, data['access_token']);
       // boxTuya.write(kTuyaExpireTime, data['expire_time']);
@@ -93,6 +95,7 @@ class TuyaController extends GetxController {
 
       // logKey('success write token', boxTuya.read(kTuyaAccessToken));
       // logKey('success write refresh token', boxTuya.read(kTuyaRefreshToken));
+      logger.i('success tuyaGetToken');
     } on DioException catch (e) {
       // logKey('error auth', e.message);
       logger.e('Error tuyaGetToken', error: e);
@@ -103,6 +106,7 @@ class TuyaController extends GetxController {
   //* not working
   Future<void> tuyaRefreshToken({required String refreshToken}) async {
     // final refreshToken = boxTuya.read(kTuyaRefreshToken);
+    return;
     final url = '$tuyaBaseUrl/$ver/token/$refreshToken?grant_type=1';
     final headers = _generateHeaderSignature(url: url).headers;
     try {
@@ -117,13 +121,15 @@ class TuyaController extends GetxController {
       final data = res.data['result'] as Map<String, dynamic>;
       _expiredTime.value = data['expire_time'];
 
-      boxTuya.erase();
+      await boxTuya.erase();
       boxTuya.write(kTuyaTokenMap, data);
       boxTuya.write(kTuyaAccessToken, data['access_token']);
       boxTuya.write(kTuyaRefreshToken, data['refresh_token']);
       // logKey('token refreshed. New Token', data['access_token']);
+      logger.i('success tuyaRefreshToken');
     } on DioException catch (e) {
-      logKey('error tuyaRefreshToken', e.message);
+      // logKey('error tuyaRefreshToken', e.message);
+      logger.e('error tuyaRefreshToken', error: e);
       rethrow;
     }
   }
@@ -134,7 +140,13 @@ class TuyaController extends GetxController {
     String httpMethod = 'GET',
     bool isRefreshToken = false,
   }) {
-    var accessToken = isRefreshToken ? boxTuya.read(kTuyaRefreshToken) ?? '' : boxTuya.read(kTuyaAccessToken) ?? '';
+    // var accessToken = isRefreshToken ? boxTuya.read(kTuyaRefreshToken) ?? '' : boxTuya.read(kTuyaAccessToken) ?? '';
+    var accessToken = boxTuya.read(kTuyaAccessToken) ?? '';
+    // if (isRefreshToken) {
+    //   boxTuya.erase();
+    // } else {
+    //   accessToken = boxTuya.read(kTuyaTokenMap);
+    // }
     String timestamp = (DateTime.now().millisecondsSinceEpoch).toString();
     String nonce = const Uuid().v4();
     String contentSha256;
@@ -167,14 +179,14 @@ class TuyaController extends GetxController {
       'client_id': clientId,
       't': timestamp,
       'sign': sign,
-      // 'access_token': accessToken,
+      'access_token': accessToken,
       'nonce': nonce,
     };
-    if (isRefreshToken) {
-      headers['refresh_token'] = accessToken;
-    } else {
-      headers['access_token'] = accessToken;
-    }
+    // if (isRefreshToken) {
+    //   headers['refresh_token'] = accessToken;
+    // } else {
+    //   headers['access_token'] = accessToken;
+    // }
     // logKey('headers', headers);
     return (signature: sign, timeStamp: timestamp, nonce: nonce, headers: headers);
   }
@@ -314,15 +326,17 @@ class TuyaController extends GetxController {
       final Response res = await networkC.post(url, body: data, headers: headers);
       if (res.data?['code'] == 1010 && res.data?['msg'] == 'token invalid') {
         // if (true) {
-        await tuyaGetToken();
+        await tuyaGetToken(isRefresh: true);
         await turnOff(deviceId, count: count + 1);
       } else {
         logger.i('success turnOff');
       }
     } on DioException catch (e) {
       logger.e('Error turnoff', error: e);
+      rethrow;
     } catch (e) {
       logger.w('Error turnOff', error: e);
+      rethrow;
     }
   }
 
@@ -343,13 +357,16 @@ class TuyaController extends GetxController {
       final headers = _generateHeaderSignature(httpMethod: 'POST', url: url, commands: commands).headers;
       final Response res = await networkC.post(url, body: data, headers: headers);
       if (res.data?['code'] == 1010 && res.data?['msg'] == 'token invalid') {
-        await tuyaGetToken();
+        await tuyaGetToken(isRefresh: true);
         await turnOn(deviceId, count: count + 1);
       } else {
         logger.i('success turnOn');
       }
     } on DioException catch (e) {
       // logKey('error turnOff', e.message);
+      logger.e('error turnon', error: e);
+      rethrow;
+    } catch (e) {
       logger.e('error turnon', error: e);
       rethrow;
     }
@@ -527,7 +544,7 @@ class TuyaController extends GetxController {
   }
 
   void initialFunction() async {
-    await tuyaGetToken();
+    await tuyaGetToken(isRefresh: true);
     setupTimer();
     // timer = Timer.periodic(
     //   const Duration(

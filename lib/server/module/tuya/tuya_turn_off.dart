@@ -10,11 +10,11 @@ class TuyaTurnOff extends gs.GetView<TuyaController> {
   build(gs.BuildContext context) {
     var req = context.request.query;
     // logger.i(context.request.path);
-    context.request.payload().then((value) {
+    context.request.payload().then((value) async {
       try {
         logger.i(value, error: context.request.path);
         final data = TuyaPayloadModels.fromJson(value as Map<String, dynamic>);
-        controller.turnOff(data.deviceId);
+        await controller.turnOff(data.deviceId);
       } catch (e) {
         logger.e('Error ${context.request.path}', error: e);
       }

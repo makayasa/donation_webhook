@@ -10,7 +10,7 @@ class MyLogOutput extends LogOutput {
     final networkC = Get.find<NetworkController>();
     final file = networkC.logFile;
     for (var line in event.lines) {
-      await file.writeAsString('$line\n', mode: FileMode.writeOnlyAppend);
+      file.writeAsStringSync('$line\n', mode: FileMode.writeOnlyAppend);
       print(line);
     }
   }

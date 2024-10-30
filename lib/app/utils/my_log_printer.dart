@@ -39,7 +39,7 @@ class MyLogPrinter extends LoggyPrinter {
 
     print(color(text));
     final networkC = Get.find<NetworkController>();
-    networkC.logFile.writeAsString(text,mode: FileMode.writeOnlyAppend);
+    networkC.logFile.writeAsStringSync(text,mode: FileMode.writeOnlyAppend);
 
     // print(color('test').toString());
     // final String test = color('test');

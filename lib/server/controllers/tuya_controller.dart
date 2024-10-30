@@ -7,16 +7,12 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart' as g hide Response;
 import 'package:get_server/get_server.dart' hide Response;
 import 'package:get_storage/get_storage.dart';
-import 'package:logger/logger.dart';
 import 'package:saweria_webhook/app/utils/constant.dart';
 import 'package:saweria_webhook/app/utils/function_utils.dart';
 import 'package:saweria_webhook/app/utils/network_controller.dart';
 import 'package:uuid/uuid.dart';
 
 class TuyaController extends GetxController {
-  var logger = Logger(
-    printer: kDefaultPrettyPrinter,
-  );
   final _expiredTime = RxInt(0);
 
   Timer? timer;
@@ -503,10 +499,9 @@ class TuyaController extends GetxController {
     }
   }
 
-  String checkTimer() {
-    var _timer = '';
-    _timer = _expiredTime.value.toString();
-    return _timer;
+  void checkTimer() {
+    // _timer = _expiredTime.value.toString();
+    logger.t(_expiredTime.value);
   }
 
   void setupTimer() {

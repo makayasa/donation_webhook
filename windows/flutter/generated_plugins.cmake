@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   connectivity_plus
+  permission_handler_windows
   screen_retriever
   window_manager
 )

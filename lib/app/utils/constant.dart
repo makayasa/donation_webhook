@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+import 'package:saweria_webhook/app/utils/my_log_output.dart';
 
 const kPrimaryColor = Color(0XFFF3EEEA);
 const kSecondaryColor = Color(0XFFEBE3D5);
@@ -26,6 +27,7 @@ TextStyle get kDefaultTextStyle {
 
 final logger = Logger(
   printer: kDefaultPrettyPrinter,
+  output: MyLogOutput(),
 );
 
 final kDefaultPrettyPrinter = PrettyPrinter(

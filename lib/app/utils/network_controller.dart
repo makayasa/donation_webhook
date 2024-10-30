@@ -1,18 +1,32 @@
+import 'dart:io';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_loggy_dio/flutter_loggy_dio.dart';
 import 'package:get/get.dart' hide Response, FormData;
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:saweria_webhook/app/utils/function_utils.dart';
 // import 'package:http/http.dart' hide Response;
 // import 'package:get/get_connect.dart' hide Re;
 
 class NetworkController extends GetxController {
   final Dio _dio = Dio();
+  String filepath = '';
 // _dio;
+  late File logFile;
 
   @override
-  onInit() {
+  onInit() async {
     super.onInit();
     // _dio.interceptors.add(TestInterceptor());
+    // Directory a = await getTemporaryDirectory();
+    final res = await Permission.storage.request();
+    logKey('res permission', res.isGranted);
+    Directory a = await getApplicationDocumentsDirectory();
+
+    filepath = a.path;
+    logFile = File('${filepath + r'\'}ini_log_file.txt');
     _dio.interceptors.add(
       LoggyDioInterceptor(
         requestHeader: true,

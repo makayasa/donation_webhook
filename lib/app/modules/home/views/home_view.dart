@@ -24,6 +24,7 @@ class HomeView extends GetResponsiveView<HomeController> {
         onPressed: () async {
           // controller.playMediaSource();
           Get.toNamed(Routes.CREATE_WEBHOOK_COMMAND);
+          controller.tuyaC.checkTimer();
           // controller.obsWebSocket.close();
           // controller.sourceStateChangedAllScene('Main Monitor');
           // controller.sourceStateChangedAllScene('Webcam');

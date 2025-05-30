@@ -529,7 +529,7 @@ class TuyaController extends GetxController {
       (_timer) async {
         if (_expiredTime.value == 0) {
           try {
-            await tuyaGetToken();
+            await tuyaGetToken(isRefresh: true);
             timer?.cancel();
             setupTimer();
           } catch (e) {

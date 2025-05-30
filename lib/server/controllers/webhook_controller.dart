@@ -1,6 +1,7 @@
 import 'package:get/get.dart' as g;
 import 'package:get_server/get_server.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:saweria_webhook/app/controllers/obs_controller.dart';
 import 'package:saweria_webhook/app/utils/constant.dart';
 import 'package:saweria_webhook/app/utils/environment.dart';
 import 'package:saweria_webhook/server/controllers/tuya_controller.dart';
@@ -61,20 +62,59 @@ class WebhookController extends GetxController {
     // if (data.soundboardOptionId == '362dd29d-34eb-4492-a95b-45608a9edb5f') {
     // await homeC.toggleSourceOnActiveScene('Awoo');
 
-    if (data.soundboardSoundId == '362dd29d-34eb-4492-a95b-45608a9edb5f') {
-      tuyaC.turnOff(lampuKamarDeviceId);
-    } else if (data.soundboardSoundId == 'f7afed74-4a3e-468f-9779-cead122e7781') {
-      tuyaC.turnOn(lampuKamarDeviceId);
-    } else if (data.soundboardSoundId == 'dfe8802b-1ca0-4a6a-a2e1-e1c0b3b2e321' && box.read('valo')) {
-      dropWeapon(true);
-    } else if (data.soundboardSoundId == 'cb570f65-753b-41d0-8a4e-e41564cc88dc') {
-      await homeC.playMediaSource('Awoo');
+    if (data.soundboardSoundId != null && data.soundboardName != null) {
+      _soundboard(data.soundboardName!);
+    } else {
+      /// on progres
     }
+
+    // if (data.soundboardSoundId == '362dd29d-34eb-4492-a95b-45608a9edb5f') {
+    //   tuyaC.turnOff(lampuKamarDeviceId);
+    // } else if (data.soundboardSoundId == 'f7afed74-4a3e-468f-9779-cead122e7781') {
+    //   tuyaC.turnOn(lampuKamarDeviceId);
+    // } else if (data.soundboardSoundId == 'dfe8802b-1ca0-4a6a-a2e1-e1c0b3b2e321' && box.read('valo')) {
+    //   dropWeapon(true);
+    // } else if (data.soundboardSoundId == 'cb570f65-753b-41d0-8a4e-e41564cc88dc') {
+    //   await homeC.playMediaSource('Awoo');
+    // }
     // await homeC.toggleSourceOnActiveScene('Mixer AG06', sceneName: 'Audio');
     // await homeC.toggleSourceOnActiveScene('Logitech Webcam');
     // await Future.delayed(const Duration(seconds: 5));
     // await homeC.toggleSourceOnActiveScene('Logitech Webcam');
     // await homeC.toggleSourceOnActiveScene('Mixer AG06', sceneName: 'Audio');
+  }
+
+  void _soundboard(String soundboardName, {String? deviceId}) async {
+    ObsController obsC = g.Get.find<ObsController>();
+    switch (soundboardName) {
+      case 'Awoo':
+        await obsC.playMediaSource('Awoo');
+        break;
+
+      case 'Matikan Lampu':
+        await tuyaC.turnOff(deviceId!);
+        break;
+
+      case 'Nyalakan Lampu':
+        await tuyaC.turnOn(deviceId!);
+        break;
+
+      case 'Drop Weapon':
+        // await
+        break;
+
+      default:
+    }
+    if (soundboardName == 'Awoo') {}
+    //  if (data.soundboardSoundId == '362dd29d-34eb-4492-a95b-45608a9edb5f') {
+    //   tuyaC.turnOff(lampuKamarDeviceId);
+    // } else if (data.soundboardSoundId == 'f7afed74-4a3e-468f-9779-cead122e7781') {
+    //   tuyaC.turnOn(lampuKamarDeviceId);
+    // } else if (data.soundboardSoundId == 'dfe8802b-1ca0-4a6a-a2e1-e1c0b3b2e321' && box.read('valo')) {
+    //   dropWeapon(true);
+    // } else if (data.soundboardSoundId == 'cb570f65-753b-41d0-8a4e-e41564cc88dc') {
+    //   await homeC.playMediaSource('Awoo');
+    // }
   }
 
   @override

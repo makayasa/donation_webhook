@@ -1,12 +1,11 @@
 // import 'package:flutter/material.dart';
 import 'package:get/get.dart' as gett;
 import 'package:get_server/get_server.dart' as gs;
+import 'package:saweria_webhook/app/controllers/obs_controller.dart';
 import 'package:saweria_webhook/app/utils/constant.dart';
 import 'package:saweria_webhook/server/controllers/webhook_controller.dart';
 import 'package:saweria_webhook/server/models/saweria_payload_models.dart';
 import 'package:saweria_webhook/server/models/tako_payload_models.dart';
-
-import '../../../app/modules/home/controllers/home_controller.dart';
 // import 'get'
 
 class Webhook extends gs.GetView<WebhookController> {
@@ -18,15 +17,15 @@ class Webhook extends gs.GetView<WebhookController> {
     var req = context.request.query;
     context.request.payload().then((value) {
       // logKey('payload', value);
-      var homeC = gett.Get.find<HomeController>();
+      var obsC = gett.Get.find<ObsController>();
       if (value == null) {
         return;
       }
       try {
         if (value.containsKey('amount_raw')) {
-          homeC.hideSourceOnAllScene('Webcam');
+          obsC.hideSourceOnAllScene('Webcam');
           final a = {
-            'asd': homeC.hideSourceOnAllScene('Webcam'),
+            'asd': obsC.hideSourceOnAllScene('Webcam'),
           };
           a['asd'];
           logger.t('Donasi Saweria');

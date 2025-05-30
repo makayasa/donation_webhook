@@ -3,8 +3,10 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:saweria_webhook/app/components/default_button.dart';
+import 'package:saweria_webhook/app/controllers/obs_controller.dart';
 import 'package:saweria_webhook/app/utils/constant.dart';
 import 'package:saweria_webhook/app/utils/default_text.dart';
+import 'package:saweria_webhook/server/server_helpers/function_enum.dart';
 
 import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
@@ -23,6 +25,9 @@ class HomeView extends GetResponsiveView<HomeController> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           // controller.playMediaSource();
+          final tuyaaa = TuyaUseCaseImpl();
+          tuyaaa.turnOn('deviceId');
+          return;
           Get.toNamed(Routes.CREATE_WEBHOOK_COMMAND);
           controller.tuyaC.checkTimer();
           // controller.obsWebSocket.close();
@@ -133,86 +138,90 @@ class ObsCard extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return FormBuilder(
-      key: controller.formKeyObs,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        constraints: const BoxConstraints(
-          minHeight: 720 / 3,
-        ),
-        height: Get.mediaQuery.size.height * 0.3,
-        color: kFourthColor,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+    return GetX<ObsController>(
+      init: ObsController(),
+      initState: (_) {},
+      builder: (obsC) {
+        return FormBuilder(
+          key: obsC.formKeyObs,
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            constraints: const BoxConstraints(
+              minHeight: 720 / 3,
+            ),
+            height: Get.mediaQuery.size.height * 0.3,
+            color: kFourthColor,
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                DefText('OBS').extraLarge,
-                const SizedBox(width: 5),
-                Obx(
-                  () => Container(
-                    height: 20,
-                    width: 20,
-                    decoration: BoxDecoration(
-                      color: controller.isObsConnected.value ? Colors.green : Colors.red,
-                      shape: BoxShape.circle,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    DefText('OBS').extraLarge,
+                    const SizedBox(width: 5),
+                    Container(
+                      height: 20,
+                      width: 20,
+                      decoration: BoxDecoration(
+                        color: obsC.isObsConnected.value ? Colors.green : Colors.red,
+                        shape: BoxShape.circle,
+                      ),
                     ),
-                  ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: FormBuilderTextField(
+                        name: 'ip',
+                        initialValue: '192.168.0.2',
+                        decoration: const InputDecoration(
+                          hintText: 'IP',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: FormBuilderValidators.compose(
+                          [
+                            FormBuilderValidators.required(),
+                            FormBuilderValidators.ip(),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: FormBuilderTextField(
+                        name: 'port',
+                        decoration: const InputDecoration(
+                          hintText: 'port',
+                          border: OutlineInputBorder(),
+                        ),
+                        initialValue: '4460',
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(),
+                          FormBuilderValidators.numeric(),
+                        ]),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                DefaultButton(
+                  onTap: () {
+                    // if (controller.isObsConnected.value) {
+                    //   return;
+                    // }
+                    obsC.connectObs();
+                  },
+                  child: DefText('Connect').normal,
                 ),
               ],
             ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: FormBuilderTextField(
-                    name: 'ip',
-                    initialValue: '192.168.0.2',
-                    decoration: const InputDecoration(
-                      hintText: 'IP',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: FormBuilderValidators.compose(
-                      [
-                        FormBuilderValidators.required(),
-                        FormBuilderValidators.ip(),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: FormBuilderTextField(
-                    name: 'port',
-                    decoration: const InputDecoration(
-                      hintText: 'port',
-                      border: OutlineInputBorder(),
-                    ),
-                    initialValue: '4460',
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(),
-                      FormBuilderValidators.numeric(),
-                    ]),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            DefaultButton(
-              onTap: () {
-                // if (controller.isObsConnected.value) {
-                //   return;
-                // }
-                controller.connectObs();
-              },
-              child: DefText('Connect').normal,
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
@@ -230,7 +239,7 @@ class NgrokCard extends GetView<HomeController> {
         constraints: const BoxConstraints(
           minHeight: 720 / 3,
         ),
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         height: Get.mediaQuery.size.height * 0.3,
         color: kThirdColor,
         child: Column(

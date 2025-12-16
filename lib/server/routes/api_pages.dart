@@ -1,5 +1,6 @@
 import 'package:get_server/get_server.dart' as gs;
 import 'package:saweria_webhook/server/module/tuya/tur_ir_ac_turn_on.dart';
+import 'package:saweria_webhook/server/module/tuya/tuya_change_color.dart';
 import 'package:saweria_webhook/server/module/tuya/tuya_ir_ac_turn_off.dart';
 import 'package:saweria_webhook/server/module/tuya/tuya_turn_off.dart';
 import 'package:saweria_webhook/server/module/tuya/tuya_turn_on.dart';
@@ -36,8 +37,23 @@ class ApiPages {
       method: gs.Method.post,
     ),
     gs.GetPage(
+      name: ApiRoutes.TURN_ON,
+      page: () => TuyaTurnOn(),
+      method: gs.Method.get,
+    ),
+    gs.GetPage(
       name: ApiRoutes.TURN_OFF,
       page: () => TuyaTurnOff(),
+      method: gs.Method.post,
+    ),
+    gs.GetPage(
+      name: ApiRoutes.TURN_OFF,
+      page: () => TuyaTurnOff(),
+      method: gs.Method.get,
+    ),
+    gs.GetPage(
+      name: ApiRoutes.CHANGE_COLOR,
+      page: () => TuyaChangeColor(),
       method: gs.Method.post,
     ),
     gs.GetPage(

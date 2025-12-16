@@ -4,6 +4,7 @@ import 'dart:convert';
 // import 'package:get/get.dart' as g;
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart' as g hide Response;
 import 'package:get_server/get_server.dart' hide Response;
 import 'package:get_storage/get_storage.dart';
@@ -296,6 +297,40 @@ class TuyaController extends GetxController {
     brightness.value = 1000;
   }
 
+  Future<void> changeColor({required String deviceId, required String hexColor}) async {
+    final url = '$tuyaBaseUrl/$ver/devices/$deviceId/commands';
+    hexColor = hexColor.replaceAll("#", "");
+
+    // Tambahkan alpha jika belum ada (FF = fully opaque)
+    if (hexColor.length == 6) {
+      hexColor = "FF$hexColor";
+    } else if (hexColor.length != 8) {
+      throw FormatException("Hex color harus 6 atau 8 digit");
+    }
+    int colorInt = int.parse(hexColor, radix: 16);
+    final color = Color(colorInt);
+    final hsvColor = HSVColor.fromColor(color);
+    final commands = [
+      {"code": "switch_led", "value": true},
+      {"code": "work_mode", "value": "colour"},
+      {
+        "code": "colour_data_v2",
+        "value": {"h": hsvColor.hue.toStringAsFixed(0), "s": (hsvColor.saturation * 1000).toStringAsFixed(0), "v": (hsvColor.value * 1000).toStringAsFixed(0)}
+      },
+    ];
+    final data = {'commands': jsonEncode(commands)};
+    try {
+      await checkTokenValidation();
+      final headers = _generateHeaderSignature(url: url, commands: commands, httpMethod: 'POST').headers;
+      final Response res = await networkC.post(url, body: data, headers: headers);
+    } on DioException catch (e) {
+      logger.e('Error turnoff', error: e);
+      rethrow;
+    } catch (e) {
+      logger.w('Error turnOff', error: e);
+      rethrow;
+    }
+  }
   // void turnOff() {
   //   var tuya = tuyaInit();
   //   tuya += 'lampu_kamar.turn_off()';

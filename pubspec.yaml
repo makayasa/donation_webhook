@@ -24,7 +24,7 @@ dependencies:
   form_builder_validators: ^11.0.0
   obs_websocket: ^5.1.0+4
   loggy: ^2.0.3
-  web_socket_channel: ^2.4.0
+  web_socket_channel: ^2.4.3
   tuya_home_sdk_flutter: ^0.0.3
   crypto: ^3.0.3
   dio: ^5.4.3+1
